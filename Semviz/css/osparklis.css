@@ -19,7 +19,7 @@ margin:5px 0px;
 padding:5px 10px;
 height:50px;
 color:white;
-background-image:url('sparkles_background.png');
+background-image:url('../resources/sparkles_background.png');
 background-repeat:repeat-x;
 }
 

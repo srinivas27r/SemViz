@@ -7,8 +7,45 @@
 <meta name="keywords" content="SPARQL, faceted search, semantic search, exploratory search, complex queries, natural language interface, logical information systems"/>
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="../css/osparklis.css">
-<script src="../js/osparklis.js">
+<script src="../js/osparklis.js"></script>
+
+<!-- New Code -->
+<script src="../js/sparklisJS.js"></script>
+<link rel="stylesheet" type="text/css" href="../css/style.css">
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+<script src="../js/jquery.js"></script>
+<script src="../js/jquery.tabs-min.js"></script>
+
+<script type="text/javascript">
+  $(document)
+            .ready(
+                    function() {
+                        var $content = $(".content").hide();
+                        $(".toggle")
+                                .on(
+                                        "click",
+                                        function(e) {
+                                            $(this).toggleClass("expanded");
+                                            $content.slideToggle();
+                                            if (document
+                                                    .getElementById('titreG').innerHTML == 'Ajouter un graphique') {
+                                                document
+                                                        .getElementById('titreG').innerHTML = 'Annuler';
+                                            } else if (document
+                                                    .getElementById('titreG').innerHTML == 'Annuler') {
+                                                document
+                                                        .getElementById('titreG').innerHTML = 'Ajouter un graphique';
+                                            }
+                                        });
+                    });
+    ;
+
 </script>
+
+<!-- End New Code -->
+
 </head>
 
 <body>
@@ -91,7 +128,7 @@
     <span class="tooltiped">
       <span class="tooltip lang-en">Click to open/close configuration panel</span>
       <span class="tooltip lang-fr">Cliquer pour ouvrir/fermer le panneau de configuration</span>
-      <img id="config-control" src="resources/icon-config.png" height="40" alt="Config">
+      <img id="config-control" src="../resources/icon-config.png" height="40" alt="Config">
     </span>
   </div>
 
@@ -468,6 +505,197 @@
     </div>
   </div>
 
+  <!-- NEW BEGINNING  ------------------------------------------------------------------>
+	<div class="heading">
+		<span class="texte lang-en">Your Charts</span> <span
+			class="texte lang-fr">Graphiques</span>
+	</div>
+
+	<!-- Setting aera -->
+	<div class="toggle" id="titreG">Ajouter un graphique</div>
+
+	<div class="content">
+		Pour ajouter un une div cliquer sur le bouton
+		<button onclick="addChart()">Ajouter Graphique</button>
+
+		<ul id="onglets">
+			<li><a href="#debut" data-toggle="tab">Debut</a></li>
+			<li><a href="#graphiques" data-toggle="tab">Graphiques</a></li>
+			<li><a href="#personnaliser" data-toggle="tab">Personnaliser</a></li>
+		</ul>
+		<table>
+			<tr style="vertical-align: top;">
+				<td>
+					<div id="contenus-onglets">
+						<div id="debut">
+							Données - <a href="#">Sélectionner les plages...</a>
+							<p>
+								<input type="text" name="plagesDonnees" />
+							</p>
+							<p>
+								Associer les plages : <select name="associerPlages"
+									id="associerPlages">
+									<option value="Horizontalement">Horizontalement</option>
+									<option value="Verticalement">Verticalement</option>
+								</select>
+							</p>
+							<input type="checkbox" name="intervertirLC" id="intervertirLC" />
+							<label for="intervertirLC">Intervertir lignes et colonnes</label><br />
+							<input type="checkbox" name="enTete" id="enTete" /> <label
+								for="enTete">Utiliser la ligne 3 pour les en-têtes</label><br />
+							<input type="checkbox" name="libelles" id="libelles" /> <label
+								for="libelles">Utiliser la colonne A pour les libellés</label><br />
+							<br /> <b>Graphiques recommandés</b> <a href="#">Autres >></a><br />
+							<div id="graphs">
+								<input type="radio" name="graphs" id="graph1" value="graph1"
+									onclick="submit('line');" /><label for="graph1"><img
+									src="../resources/chart/graph1.png" " alt="graph1" /></label> <input type="radio"
+									name="graphs" id="graph2" value="graph2"
+									onclick="submit('histo_horizontal');" /><label for="graph2"><img
+									src="../resources/chart/graph2.png" " alt="graph2" /></label><br /> <input
+									type="radio" name="graphs" id="graph3" value="graph3"
+									onclick="submit('histo_vertical');" /><label for="graph3"><img
+									src="../resources/chart/graph3.png" alt="graph3" /></label> <input type="radio"
+									name="graphs" id="graph4" value="graph4"
+									onclick="submit('pie');" /><label for="graph4"><img
+									src="../resources/chart/graph4.png" alt="graph4" /></label>
+							</div>
+							<!--<button onclick="submit('point');">Point Chart</button>
+						<button onclick="submit('map');">Map Chart</button>-->
+						</div>
+						<div id="graphiques">
+							<div id="graphs2">
+								<table>
+									<tr>
+										<td style="border-right-style: dotted;"><input
+											type="radio" name="graphs" id="courbe" value="courbe"
+											onclick="submit('histo_horizontal');" /><label for="courbe"><img
+												src="../resources/chart/graph1.png" " alt="courbe" /></label><br /> <input
+											type="radio" name="graphs" id="colonne" value="colonne"
+											onclick="submit('histo_vertical');" /><label for="colonne"><img
+												src="../resources/chart/graph2.png" " alt="colonne" /></label><br /> <input
+											type="radio" name="graphs" id="barre" value="barre"
+											onclick="submit('pie');" /><label for="barre"><img
+												src="../resources/chart/graph3.png" alt="barre" /></label><br /> <input
+											type="radio" name="graphs" id="carte" value="carte"
+											onclick="submit('line');" /><label for="carte"><img
+												src="../resources/chart/graph4.png" alt="carte" /></label><br /></td>
+										<td></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div id="personnaliser">
+							<p>
+								<input type="text" name="typeGraphique" disabled />
+							</p>
+							<p id="titre">
+								Titre <input type="radio" name="titreGras" id="titreGras"
+									value="titreGras" /><label for="titreGras"><img
+									src="../resources/chart/bold.png" " alt="titreGras" /></label> <input type="radio"
+									name="titreItalique" id="titreItalique" value="titreItalique" /><label
+									for="titreItalique"><img src="../resources/chart/italic.png"
+									" alt="titreItalique" /></label> <select name="tailleTitre"
+									id="tailleTitre">
+									<option value="10">10</option>
+									<option value="12">12</option>
+									<option value="10">14</option>
+									<option value="12">16</option>
+									<option value="10">18</option>
+									<option value="12">20</option>
+									<option value="10">24</option>
+									<option value="12">30</option>
+								</select> <select name="couleurTitre" id="couleurTitre">
+									<option value="10">Rouge</option>
+								</select>
+							</p>
+							<p>
+								<input type="text" name="titreGraphique"
+									value="Titre du graphique" />
+							</p>
+							<p>Légende</p>
+							<p id="legende">
+								<input type="radio" name="titreGras" id="titreGras"
+									value="titreGras" /><label for="titreGras"><img
+									src="../resources/chart/bold.png" " alt="titreGras" /></label> <input type="radio"
+									name="titreItalique" id="titreItalique" value="titreItalique" /><label
+									for="titreItalique"><img src="../resources/chart/italic.png"
+									" alt="titreItalique" /></label> <select name="tailleTitre"
+									id="tailleTitre">
+									<option value="10">10</option>
+									<option value="12">12</option>
+									<option value="10">14</option>
+									<option value="12">16</option>
+									<option value="10">18</option>
+									<option value="12">20</option>
+									<option value="10">24</option>
+									<option value="12">30</option>
+								</select> <select name="couleurTitre" id="couleurTitre">
+									<option value="10">Rouge</option>
+								</select>
+							</p>
+							<p>
+								Police <select name="police" id="police">
+									<option value="10">Arial</option>
+									<option value="12">Comic Sans MS</option>
+								</select>
+							</p>
+							<p>
+								Arrière-plan <select name="couleurArrierePlan"
+									id="couleurArrierePlan">
+									<option value="10">blanc</option>
+									<option value="12">rouge</option>
+								</select>
+							</p>
+						</div>
+					</div> <input type="submit" value="Inserer" /> <input type="submit"
+					value="Annuler" />
+				</td>
+				<td>
+					<div id="graphe"></div>
+				</td>
+			</tr>
+		</table>
+		<!-- This script has to stay after the setting -->
+		<script>
+			(function($) {
+				$('#onglets').tabs();
+			})(jQuery);
+			$('#graphs input:radio').addClass('input_hidden');
+			$('#graphs2 input:radio').addClass('input_hidden');
+			$('#legende input:radio').addClass('input_hidden');
+			$('#titre input:radio').addClass('input_hidden');
+			$('#graphs label').click(
+					function() {
+						$(this).addClass('selected').siblings().removeClass(
+								'selected');
+					});
+			$('#graphs2 label').click(
+					function() {
+						$(this).addClass('selected').siblings().removeClass(
+								'selected');
+					});
+			$('#titre label').click(
+					function() {
+						$(this).addClass('selected').siblings().removeClass(
+								'selected');
+					});
+			$('#legende label').click(
+					function() {
+						$(this).addClass('selected').siblings().removeClass(
+								'selected');
+					});
+		</script>
+
+
+	</div>
+
+
+	<!-- zone intégration graphique -->
+	<ul id="charts">
+	</ul>
+	<!-- NEW END ---------------------------------------------------------------------->
+
   <div id="sparql">
     <div class="heading">
       <span class="texte lang-en">Your query in SPARQL</span>
@@ -502,4 +730,5 @@
     </p>
   </footer>
 </body>
+<script src="../js/sparklisJS.js"></script>
 </html>
