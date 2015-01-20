@@ -10,37 +10,23 @@
 <script src="../js/osparklis.js"></script>
 
 <!-- New Code -->
-<script src="../js/sparklisJS.js"></script>
+
 <link rel="stylesheet" type="text/css" href="../css/style.css">
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 <script src="../js/jquery.js"></script>
+<script src="../js/chart.js"></script>
+
 <script src="../js/jquery.tabs-min.js"></script>
+<script src="../js/sugar.js"></script>
+<script src="../js/tableToJSON.js"></script>
 
 <script type="text/javascript">
-  $(document)
-            .ready(
-                    function() {
-                        var $content = $(".content").hide();
-                        $(".toggle")
-                                .on(
-                                        "click",
-                                        function(e) {
-                                            $(this).toggleClass("expanded");
-                                            $content.slideToggle();
-                                            if (document
-                                                    .getElementById('titreG').innerHTML == 'Ajouter un graphique') {
-                                                document
-                                                        .getElementById('titreG').innerHTML = 'Annuler';
-                                            } else if (document
-                                                    .getElementById('titreG').innerHTML == 'Annuler') {
-                                                document
-                                                        .getElementById('titreG').innerHTML = 'Ajouter un graphique';
-                                            }
-                                        });
-                    });
-    ;
+$(document).ready(function(){
+  // we call the function
+  $("#control-charts").hide();
+});
 
 </script>
 
@@ -506,9 +492,10 @@
   </div>
 
   <!-- NEW BEGINNING  ------------------------------------------------------------------>
+ <div id="control-charts">
 	<div class="heading">
-		<span class="texte lang-en">Your Charts</span> <span
-			class="texte lang-fr">Graphiques</span>
+		<span class="texte lang-en">Your Charts</span> 
+		<span class="texte lang-fr">Graphiques</span>
 	</div>
 
 	<!-- Setting aera -->
@@ -690,10 +677,9 @@
 
 	</div>
 
-
+</div>
 	<!-- zone intégration graphique -->
-	<ul id="charts">
-	</ul>
+	<ul id="charts"></ul>
 	<!-- NEW END ---------------------------------------------------------------------->
 
   <div id="sparql">
