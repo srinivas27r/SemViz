@@ -113,10 +113,14 @@ function position(){
 
 function addChart() {
     var aera = document.getElementById("charts");
-    var chart = $('<li>').text("last chart added").appendTo(aera);
-    $('li').click(function() {
+    var chart = $('<li class="chart">').text("last chart added").appendTo(aera);
+    $('li.chart').click(function() {
         $(this).remove();
     });
+}
+
+function deleteChart(){
+	 $(this).remove();
 }
 
 google.load('visualization', '1', {

@@ -6,9 +6,16 @@ height du graphe pour ne pas décaler toute la page*/
 .toggle.expanded{
 }
 .content{
-background-color: grey ; 
 width :100%; 
 }
+table #settings{
+	border:none; 
+}
+
+#contenus-onglets{
+	heigth: 300px; 
+}
+
 #onglets
 		{
 			font : bold 11px Batang, arial, serif;
