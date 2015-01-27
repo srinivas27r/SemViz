@@ -13,6 +13,9 @@ var abscisse = [];
 var ordonne = [];
 var graphe_title = [];
 
+var graph_abscisse = [];
+var graph_ordonne = [];
+
 
 var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
@@ -131,6 +134,84 @@ google.load('visualization', '1', {
 // ordonne = [ 65000000, 82000000, 45000000, 34000000, 6E6 ];
 // graphe_title = [ 'Country', 'Population' ]
 
+function in_array(string, array){
+    var result = false;
+    for(i=0; i<array.length; i++){
+        if(array[i] == string){
+            result = true;
+        }
+    }
+    return result;
+}
+
+function aggreg_count() {
+	graph_ordonne= [];
+	graph_abscisse = [];
+	var increm =0;
+	for (var i = 0; i < abscisse.length; i++) {
+		if (!in_array(abscisse[i],graph_abscisse)){
+			graph_ordonne [increm] = 1;
+			graph_abscisse.add(abscisse[i]);
+	        for (var y=0; y < abscisse.length; y++) {
+	        	if (i!=y) {
+	        		if (abscisse[i]==abscisse[y]){
+	        			graph_ordonne [increm] = graph_ordonne[increm]+1;
+	        		}
+	        	}
+	        }
+	        increm = increm +1;
+		}
+    }
+}
+
+function aggreg_somme() {
+	graph_ordonne= [];
+	graph_abscisse = [];
+	var increm =0;
+	for (var i = 0; i < abscisse.length; i++) {
+		if (!in_array(abscisse[i],graph_abscisse)){
+			graph_ordonne [increm] = ordonne[i];
+			graph_abscisse.add(abscisse[i]);
+	        for (var y=0; y < abscisse.length; y++) {
+	        	if (i!=y) {
+	        		if (abscisse[i]==abscisse[y]){
+	        			graph_ordonne [increm] = graph_ordonne[increm]+ordonne[y];
+	        		}
+	        	}
+	        }
+	        increm = increm+ 1;
+		}
+    }
+}
+
+function aggreg_moyenne() {
+	graph_ordonne= [];
+	graph_abscisse = [];
+	var increm = 0;
+	for (var i = 0; i < abscisse.length; i++) {
+		if (!in_array(abscisse[i],graph_abscisse)){
+			graph_ordonne [increm] = ordonne[i];
+			graph_abscisse.add(abscisse[i]);
+			var count = 1;
+	        for (var y=0; y < abscisse.length; y++) {
+	        	if (i!=y) {
+	        		if (abscisse[i]==abscisse[y]){
+	        			graph_ordonne [increm] = graph_ordonne[increm]+ordonne[y];
+	        			count++;
+	        		}
+	        	}
+	        }
+	        graph_ordonne [increm] = graph_ordonne [increm]/count;
+	        increm = increm+1;
+		}
+    }
+}
+
+function aggreg_aucun() {
+	graph_ordonne= ordonne;
+	graph_abscisse = abscisse;
+}
+
 function submit(bout) {
     var xhr;
     try { // Essayer IE
@@ -157,6 +238,26 @@ function submit(bout) {
                 document.ajax.dyn = "Error code " + xhr.status;
         }
     };
+    
+    // choix de l'aggregation
+    var aggreg = document.getElementById("aggregator").value;
+    switch (aggreg) {
+    case 'Somme':
+    	aggreg_somme();
+        break;
+    case 'Compte':
+    	aggreg_count();
+        break;
+    case 'Moyenne':
+    	aggreg_moyenne();
+        break;
+    case 'Aucun':
+    	aggreg_aucun();
+        break;
+    default:
+    	alert('TEST =' + document.getElementById("aggregator").value);
+    }
+    // choix du type de graphique
     switch (bout) {
     case 'line':
         google.setOnLoadCallback(drawLineChart());
@@ -187,8 +288,8 @@ function drawPointChart() {
     data_point.addColumn('number', 'People');
 
     //here we insert the data from our two table
-    for (var i = 0; i < abscisse.length; i++) {
-        data_point.addRows([ [ abscisse[i], ordonne[i] ] ])
+    for (var i = 0; i < graph_abscisse.length; i++) {
+        data_point.addRows([ [ graph_abscisse[i], graph_ordonne[i] ] ])
     }
     // here the option of our representation
     var options_point = {
@@ -209,8 +310,8 @@ function drawMapChart() {
     data_graph.addColumn('number', 'People');
 
     //here we insert the data from our two table
-    for (var i = 0; i < abscisse.length; i++) {
-        data_graph.addRows([ [ abscisse[i], ordonne[i] ] ])
+    for (var i = 0; i < graph_abscisse.length; i++) {
+        data_graph.addRows([ [ graph_abscisse[i], graph_ordonne[i] ] ])
     }
     // here the option of our representation
     var options_graph = {
@@ -232,8 +333,8 @@ function drawPieChart() {
     data_pie.addColumn('number', 'People');
 
     //here we insert the data from our two table
-    for (var i = 0; i < abscisse.length; i++) {
-        data_pie.addRows([ [ abscisse[i], ordonne[i] ] ])
+    for (var i = 0; i < graph_abscisse.length; i++) {
+        data_pie.addRows([ [ graph_abscisse[i], graph_ordonne[i] ] ])
     }
     // here the option of our representation
     var options = {
@@ -255,8 +356,8 @@ function drawBarChart_vertical() {
     data_bar.addColumn('number', 'People');
 
     //here we insert the data from our two table
-    for (var i = 0; i < abscisse.length; i++) {
-        data_bar.addRows([ [ abscisse[i], ordonne[i] ] ])
+    for (var i = 0; i < graph_abscisse.length; i++) {
+        data_bar.addRows([ [ graph_abscisse[i], graph_ordonne[i] ] ])
     }
     // here the option of our representation
     var options_bar = {
@@ -282,8 +383,8 @@ function drawBarChart_horizontal() {
     data_bar.addColumn('number', 'People');
 
     //here we insert the data from our two table
-    for (var i = 0; i < abscisse.length; i++) {
-        data_bar.addRows([ [ abscisse[i], ordonne[i] ] ])
+    for (var i = 0; i < graph_abscisse.length; i++) {
+        data_bar.addRows([ [ graph_abscisse[i], graph_ordonne[i] ] ])
     }
     var options_bar = {
         title : 'ici un titre',
@@ -308,8 +409,8 @@ function drawLineChart() {
     data_line.addColumn('number', 'People');
 
     //here we insert the data from our two table
-    for (var i = 0; i < abscisse.length; i++) {
-        data_line.addRows([ [ abscisse[i], ordonne[i] ] ])
+    for (var i = 0; i < graph_abscisse.length; i++) {
+        data_line.addRows([ [ graph_abscisse[i], graph_ordonne[i] ] ])
     }
     // here the option of our representation
     var options_line = {
