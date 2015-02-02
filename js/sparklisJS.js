@@ -59,12 +59,14 @@ function lookOverDom(){
     // Create Radio Button : Dimension and Measure
     headerTable.forEach(function(a) {
         var i = 0;
-
+        var j = 0;
         $("input[name=dimensionRadioButton]:radio").each(function() {
             if($(this).val() == a) i++;
         });
-
-        if(i == 0)
+        $("input[name=measureRadioButton]:radio").each(function() {
+            if($(this).val() == a) j++;
+        });
+        if(i == 0 && j == 0 )
         {  
             var abscissIndex = headerTable.findIndex(a);
             finalTab = generateData(tableToJSON);
@@ -73,10 +75,11 @@ function lookOverDom(){
             //matches text contains the value between the parentheses
             var regExp = /\(([^)]+)\)/;
             var matches = regExp.exec(text);
+            var isnum = /\d+/g.test(matches);
             
-            if(matches && matches != "en" && matches != "fr" && matches != "string") {
+            if(matches && matches != "en" && matches != "fr" && matches != "string" && !isnum) {
                 listM.append(makeRadioButton(measureRadioButton, a, a));  
-            }else{            
+            }else{  
                 listDim.append(makeRadioButton(dimensionRadioButton, a, a));
             } 
         }
@@ -153,7 +156,7 @@ function addChart() {
 }
 
 function deleteChart(){
-	 $(this).remove();
+     $(this).remove();
 }
 
 google.load('visualization', '1', {
@@ -175,71 +178,71 @@ function in_array(string, array){
 }
 
 function aggreg_count() {
-	graph_ordonate= [];
-	graph_absciss = [];
-	var increm =0;
-	for (var i = 0; i < absciss.length; i++) {
-		if (!in_array(absciss[i],graph_absciss)){
-			graph_ordonate [increm] = 1;
-			graph_absciss.add(absciss[i]);
-	        for (var y=0; y < absciss.length; y++) {
-	        	if (i!=y) {
-	        		if (absciss[i]==absciss[y]){
-	        			graph_ordonate [increm] = graph_ordonate[increm]+1;
-	        		}
-	        	}
-	        }
-	        increm = increm +1;
-		}
+    graph_ordonate= [];
+    graph_absciss = [];
+    var increm =0;
+    for (var i = 0; i < absciss.length; i++) {
+        if (!in_array(absciss[i],graph_absciss)){
+            graph_ordonate [increm] = 1;
+            graph_absciss.add(absciss[i]);
+            for (var y=0; y < absciss.length; y++) {
+                if (i!=y) {
+                    if (absciss[i]==absciss[y]){
+                        graph_ordonate [increm] = graph_ordonate[increm]+1;
+                    }
+                }
+            }
+            increm = increm +1;
+        }
     }
 }
 
 function aggreg_somme() {
-	graph_ordonate= [];
-	graph_absciss = [];
-	var increm =0;
-	for (var i = 0; i < absciss.length; i++) {
-		if (!in_array(absciss[i],graph_absciss)){
-			graph_ordonate [increm] = ordonate[i];
-			graph_absciss.add(absciss[i]);
-	        for (var y=0; y < absciss.length; y++) {
-	        	if (i!=y) {
-	        		if (absciss[i]==absciss[y]){
-	        			graph_ordonate [increm] = graph_ordonate[increm]+ordonate[y];
-	        		}
-	        	}
-	        }
-	        increm = increm+ 1;
-		}
+    graph_ordonate= [];
+    graph_absciss = [];
+    var increm =0;
+    for (var i = 0; i < absciss.length; i++) {
+        if (!in_array(absciss[i],graph_absciss)){
+            graph_ordonate [increm] = ordonate[i];
+            graph_absciss.add(absciss[i]);
+            for (var y=0; y < absciss.length; y++) {
+                if (i!=y) {
+                    if (absciss[i]==absciss[y]){
+                        graph_ordonate [increm] = graph_ordonate[increm]+ordonate[y];
+                    }
+                }
+            }
+            increm = increm+ 1;
+        }
     }
 }
 
 function aggreg_moyenne() {
-	graph_ordonate= [];
-	graph_absciss = [];
-	var increm = 0;
-	for (var i = 0; i < absciss.length; i++) {
-		if (!in_array(absciss[i],graph_absciss)){
-			graph_ordonate [increm] = ordonate[i];
-			graph_absciss.add(absciss[i]);
-			var count = 1;
-	        for (var y=0; y < absciss.length; y++) {
-	        	if (i!=y) {
-	        		if (absciss[i]==absciss[y]){
-	        			graph_ordonate [increm] = graph_ordonate[increm]+ordonate[y];
-	        			count++;
-	        		}
-	        	}
-	        }
-	        graph_ordonate [increm] = graph_ordonate [increm]/count;
-	        increm = increm+1;
-		}
+    graph_ordonate= [];
+    graph_absciss = [];
+    var increm = 0;
+    for (var i = 0; i < absciss.length; i++) {
+        if (!in_array(absciss[i],graph_absciss)){
+            graph_ordonate [increm] = ordonate[i];
+            graph_absciss.add(absciss[i]);
+            var count = 1;
+            for (var y=0; y < absciss.length; y++) {
+                if (i!=y) {
+                    if (absciss[i]==absciss[y]){
+                        graph_ordonate [increm] = graph_ordonate[increm]+ordonate[y];
+                        count++;
+                    }
+                }
+            }
+            graph_ordonate [increm] = graph_ordonate [increm]/count;
+            increm = increm+1;
+        }
     }
 }
 
 function aggreg_aucun() {
-	graph_ordonate= ordonate;
-	graph_absciss = absciss;
+    graph_ordonate= ordonate;
+    graph_absciss = absciss;
 }
 
 function submit(bout) {
@@ -273,19 +276,19 @@ function submit(bout) {
     var aggreg = document.getElementById("aggregator").value;
     switch (aggreg) {
     case 'Somme':
-    	aggreg_somme();
+        aggreg_somme();
         break;
     case 'Compte':
-    	aggreg_count();
+        aggreg_count();
         break;
     case 'Moyenne':
-    	aggreg_moyenne();
+        aggreg_moyenne();
         break;
     case 'Aucun':
-    	aggreg_aucun();
+        aggreg_aucun();
         break;
     default:
-    	alert('TEST =' + document.getElementById("aggregator").value);
+        alert('TEST =' + document.getElementById("aggregator").value);
     }
     // choix du type de graphique
     switch (bout) {
