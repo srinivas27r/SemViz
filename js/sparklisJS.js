@@ -9,14 +9,14 @@
     *      Create a request and charts appear.       *   
     ********************************************************/ 
 
-var abscisse = [];
-var ordonne = [];
+var absciss = [];
+var ordonate = [];
 var graphe_title = [];
 
-var graph_abscisse = [];
-var graph_ordonne = [];
+var graph_absciss = [];
+var graph_ordonate = [];
 
-
+//MO reacts to changes in a DOM. It detects when 'extension' appears.
 var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
 
@@ -27,92 +27,122 @@ var observer = new MutationObserver(function(mutations) {
             }
         }
     });
-  });
+});
 
-  observer.observe(document, {
+observer.observe(document, {
     childList: true,
     subtree: true,
     attributes: false,
     characterData: false,
-  });
-
+});
+  
 
 function lookOverDom(){
 
+    //Radio Buttons
+    var listDim = $('#dimensionRadio');
+    var listM = $('#measureRadio');
+    var dimensionRadioButton = "dimensionRadioButton";
+    var measureRadioButton = "measureRadioButton";
 
-//position();
- console.log('table has appeared.');
- $("#control-charts").show();
+    //Get tableToJSON without the first colunm useless
+    var tableToJSON = $('table#extension').tableToJSON({ ignoreColumns: [0] });
 
-  
-var tableToJSON = $('table#extension').tableToJSON({
-        ignoreColumns: [0]
-  });
+    //Get header of tableToJSON
+    var keysTable = tableToJSON.first();
+    var headerTable = Object.extended(keysTable).keys()
+    var value;
+    var finalTab = [];
 
-//Get columns name
-var keysTable = tableToJSON.first();
-var headerTable = Object.extended(keysTable).keys()
+    $("#control-charts").show();
 
+    // Create Radio Button : Dimension and Measure
+    headerTable.forEach(function(a) {
+        var i = 0;
 
-tableToJSON.forEach(function(a) {
+        $("input[name=dimensionRadioButton]:radio").each(function() {
+            if($(this).val() == a) i++;
+        });
+
+        if(i == 0)
+        {  
+            var abscissIndex = headerTable.findIndex(a);
+            finalTab = generateData(tableToJSON);
+            var text = finalTab[abscissIndex].first()
+
+            //matches text contains the value between the parentheses
+            var regExp = /\(([^)]+)\)/;
+            var matches = regExp.exec(text);
+            
+            if(matches && matches != "en" && matches != "fr" && matches != "string") {
+                listM.append(makeRadioButton(measureRadioButton, a, a));  
+            }else{            
+                listDim.append(makeRadioButton(dimensionRadioButton, a, a));
+            } 
+        }
+    });
+
+    //Dimension selected  
+    $('input:radio[name=dimensionRadioButton]').click(function() {
+        value = $(this).val();
+        var abscissIndex = headerTable.findIndex(value);
+        finalTab = generateData(tableToJSON);
+
+        absciss = finalTab[abscissIndex];
+
+    });
+
+    //Measure selected  
+    $('input:radio[name=measureRadioButton]').click(function() {
+        value = $(this).val();
+        var ordonateesIndex = headerTable.findIndex(value);
+
+        finalTab = generateData(tableToJSON);
+
+        finalTab[ordonateesIndex].forEach(function(a) {
+            var parseOrdonates = parseFloat(a);
+            ordonate.add(parseOrdonates);
+        });
+    });
+}
+
+/*
+* Measures related to Dimension
+* array tableToJSON : results of table named "extension"
+*/
+function generateData (tableToJSON){
 
     var keys =  Object.keys(tableToJSON[0]);
-    ordonne = [];
+    ordonate = [];
+
     var finalTab = keys.map(function(key) {
         return tableToJSON.map(function(n) {
             return n[key];
         });
     });
-    abscisse = finalTab[0];
 
-    finalTab[1].forEach(function(a) {
-        var b = parseFloat(a);
-        ordonne.add(b);
-    });
-});
-
-
-
-//console.log(ordonne);
-
-//JSON.stringify(table)
- 
-
- // var myTableArray = [];
-
-  // $("table#extension tr").each(function(){
-  //       var arrayOfThisRow = [];
-  //       var tableData = $(this).find('td');
-  //       var tableDataHeader = $(this).find('th');
-
-  //       if (tableDataHeader.length > 0) {
-  //         tableDataHeader.each(function() { arrayOfThisRow.push($(this).text()); });
-  //         myTableArray.push(arrayOfThisRow);
-  //       }
-  //       if (tableData.length > 0) {
-  //         tableData.each(function() { arrayOfThisRow.push($(this).text()); });
-  //         myTableArray.push(arrayOfThisRow);
-  //       }
-  // });
+    return finalTab;
 }
-function position(){
 
-    //var $content = $(".content").hide();
-    // var $content = $(".content");
+/*
+* Create RadioButton for Measure and Dimension
+* string name  : RadioButton attr. 
+* string value : RadioButton attr.
+* string text  : Label contains text associated to the RadioButton
+*/ 
+function makeRadioButton(name, value, text) {
 
-    // $(".toggle").on("click", function(e) {
-    //     $(this).toggleClass("expanded");
-    //     $content.slideToggle();
-    //     if (document.getElementById('titreG').innerHTML == 'Ajouter un graphique') 
-    //     {
-    //         document.getElementById('titreG').innerHTML = 'Annuler';
-    //     } else if (document.getElementById('titreG').innerHTML == 'Annuler') 
-    //     {
-    //         document.getElementById('titreG').innerHTML = 'Ajouter un graphique';
-    //     }
-    //  });
+    var label = document.createElement("label");
+    var radio = document.createElement("input");
+    radio.type = "radio";
+    radio.name = name;
+    radio.value = value;
 
-};
+    label.appendChild(radio);
+
+    label.appendChild(document.createTextNode(text));
+    return label;
+}
 
 function addChart() {
     var aera = document.getElementById("charts");
@@ -130,8 +160,8 @@ google.load('visualization', '1', {
     packages : [ 'corechart' ]
 });
 
-// abscisse = [ 'France', 'Allemagne', 'Espagne', 'Italie', 'Angleterre' ];
-// ordonne = [ 65000000, 82000000, 45000000, 34000000, 6E6 ];
+// absciss = [ 'France', 'Allemagne', 'Espagne', 'Italie', 'Angleterre' ];
+// ordonate = [ 65000000, 82000000, 45000000, 34000000, 6E6 ];
 // graphe_title = [ 'Country', 'Population' ]
 
 function in_array(string, array){
@@ -145,17 +175,17 @@ function in_array(string, array){
 }
 
 function aggreg_count() {
-	graph_ordonne= [];
-	graph_abscisse = [];
+	graph_ordonate= [];
+	graph_absciss = [];
 	var increm =0;
-	for (var i = 0; i < abscisse.length; i++) {
-		if (!in_array(abscisse[i],graph_abscisse)){
-			graph_ordonne [increm] = 1;
-			graph_abscisse.add(abscisse[i]);
-	        for (var y=0; y < abscisse.length; y++) {
+	for (var i = 0; i < absciss.length; i++) {
+		if (!in_array(absciss[i],graph_absciss)){
+			graph_ordonate [increm] = 1;
+			graph_absciss.add(absciss[i]);
+	        for (var y=0; y < absciss.length; y++) {
 	        	if (i!=y) {
-	        		if (abscisse[i]==abscisse[y]){
-	        			graph_ordonne [increm] = graph_ordonne[increm]+1;
+	        		if (absciss[i]==absciss[y]){
+	        			graph_ordonate [increm] = graph_ordonate[increm]+1;
 	        		}
 	        	}
 	        }
@@ -165,17 +195,17 @@ function aggreg_count() {
 }
 
 function aggreg_somme() {
-	graph_ordonne= [];
-	graph_abscisse = [];
+	graph_ordonate= [];
+	graph_absciss = [];
 	var increm =0;
-	for (var i = 0; i < abscisse.length; i++) {
-		if (!in_array(abscisse[i],graph_abscisse)){
-			graph_ordonne [increm] = ordonne[i];
-			graph_abscisse.add(abscisse[i]);
-	        for (var y=0; y < abscisse.length; y++) {
+	for (var i = 0; i < absciss.length; i++) {
+		if (!in_array(absciss[i],graph_absciss)){
+			graph_ordonate [increm] = ordonate[i];
+			graph_absciss.add(absciss[i]);
+	        for (var y=0; y < absciss.length; y++) {
 	        	if (i!=y) {
-	        		if (abscisse[i]==abscisse[y]){
-	        			graph_ordonne [increm] = graph_ordonne[increm]+ordonne[y];
+	        		if (absciss[i]==absciss[y]){
+	        			graph_ordonate [increm] = graph_ordonate[increm]+ordonate[y];
 	        		}
 	        	}
 	        }
@@ -185,31 +215,31 @@ function aggreg_somme() {
 }
 
 function aggreg_moyenne() {
-	graph_ordonne= [];
-	graph_abscisse = [];
+	graph_ordonate= [];
+	graph_absciss = [];
 	var increm = 0;
-	for (var i = 0; i < abscisse.length; i++) {
-		if (!in_array(abscisse[i],graph_abscisse)){
-			graph_ordonne [increm] = ordonne[i];
-			graph_abscisse.add(abscisse[i]);
+	for (var i = 0; i < absciss.length; i++) {
+		if (!in_array(absciss[i],graph_absciss)){
+			graph_ordonate [increm] = ordonate[i];
+			graph_absciss.add(absciss[i]);
 			var count = 1;
-	        for (var y=0; y < abscisse.length; y++) {
+	        for (var y=0; y < absciss.length; y++) {
 	        	if (i!=y) {
-	        		if (abscisse[i]==abscisse[y]){
-	        			graph_ordonne [increm] = graph_ordonne[increm]+ordonne[y];
+	        		if (absciss[i]==absciss[y]){
+	        			graph_ordonate [increm] = graph_ordonate[increm]+ordonate[y];
 	        			count++;
 	        		}
 	        	}
 	        }
-	        graph_ordonne [increm] = graph_ordonne [increm]/count;
+	        graph_ordonate [increm] = graph_ordonate [increm]/count;
 	        increm = increm+1;
 		}
     }
 }
 
 function aggreg_aucun() {
-	graph_ordonne= ordonne;
-	graph_abscisse = abscisse;
+	graph_ordonate= ordonate;
+	graph_absciss = absciss;
 }
 
 function submit(bout) {
@@ -288,8 +318,8 @@ function drawPointChart() {
     data_point.addColumn('number', 'People');
 
     //here we insert the data from our two table
-    for (var i = 0; i < graph_abscisse.length; i++) {
-        data_point.addRows([ [ graph_abscisse[i], graph_ordonne[i] ] ])
+    for (var i = 0; i < graph_absciss.length; i++) {
+        data_point.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
     }
     // here the option of our representation
     var options_point = {
@@ -310,8 +340,8 @@ function drawMapChart() {
     data_graph.addColumn('number', 'People');
 
     //here we insert the data from our two table
-    for (var i = 0; i < graph_abscisse.length; i++) {
-        data_graph.addRows([ [ graph_abscisse[i], graph_ordonne[i] ] ])
+    for (var i = 0; i < graph_absciss.length; i++) {
+        data_graph.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
     }
     // here the option of our representation
     var options_graph = {
@@ -333,8 +363,8 @@ function drawPieChart() {
     data_pie.addColumn('number', 'People');
 
     //here we insert the data from our two table
-    for (var i = 0; i < graph_abscisse.length; i++) {
-        data_pie.addRows([ [ graph_abscisse[i], graph_ordonne[i] ] ])
+    for (var i = 0; i < graph_absciss.length; i++) {
+        data_pie.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
     }
     // here the option of our representation
     var options = {
@@ -356,8 +386,8 @@ function drawBarChart_vertical() {
     data_bar.addColumn('number', 'People');
 
     //here we insert the data from our two table
-    for (var i = 0; i < graph_abscisse.length; i++) {
-        data_bar.addRows([ [ graph_abscisse[i], graph_ordonne[i] ] ])
+    for (var i = 0; i < graph_absciss.length; i++) {
+        data_bar.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
     }
     // here the option of our representation
     var options_bar = {
@@ -383,8 +413,8 @@ function drawBarChart_horizontal() {
     data_bar.addColumn('number', 'People');
 
     //here we insert the data from our two table
-    for (var i = 0; i < graph_abscisse.length; i++) {
-        data_bar.addRows([ [ graph_abscisse[i], graph_ordonne[i] ] ])
+    for (var i = 0; i < graph_absciss.length; i++) {
+        data_bar.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
     }
     var options_bar = {
         title : 'ici un titre',
@@ -409,8 +439,8 @@ function drawLineChart() {
     data_line.addColumn('number', 'People');
 
     //here we insert the data from our two table
-    for (var i = 0; i < graph_abscisse.length; i++) {
-        data_line.addRows([ [ graph_abscisse[i], graph_ordonne[i] ] ])
+    for (var i = 0; i < graph_absciss.length; i++) {
+        data_line.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
     }
     // here the option of our representation
     var options_line = {
