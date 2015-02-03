@@ -574,7 +574,7 @@
 										onclick="submit('histo_horizontal');" /><label for="graph2"><img
 										src="resources/chart/graph2.png" " alt="graph2" /></label><br />
 									<input type="radio" name="graphs" id="graph3" value="graph3"
-										onclick="submit('histo_vertical');" /><label for="graph3"><img
+										onclick="submit('histo_vertical',$('#chartTitle').val(), $('#boldTitle').is(':checked'), $('#italicTitle').is(':checked'), $('#fontSizeTitle').val(), $('#colorTitle').val(), $('#boldTitleLegend').is(':checked'), $('#italicTitleLegend').is(':checked'), $('#fontSizeTitleLegend').val(), $('#colorTitleLegend').val(), $('#fontName').val(), $('#backgroundColorChart').val());" /><label for="graph3"><img
 										src="resources/chart/graph3.png" alt="graph3" /></label> <input
 										type="radio" name="graphs" id="graph4" value="graph4"
 										onclick="submit('pie');" /><label for="graph4"><img
