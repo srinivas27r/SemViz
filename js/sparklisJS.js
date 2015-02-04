@@ -25,6 +25,9 @@ var observer = new MutationObserver(function(mutations) {
 			if (mutation.addedNodes[i].id == 'extension') { 
 				lookOverDom();
 			}
+			if ($("#results").is(":hidden") ){
+				$("#control-charts").hide();
+			}
 		}
 	});
 });
