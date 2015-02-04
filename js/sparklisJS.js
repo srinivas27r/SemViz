@@ -11,6 +11,8 @@
 
 var absciss = [];
 var ordonate = [];
+var ordonate_second = [];
+var ordonate_third = []
 var graphe_title = [];
 
 var graph_absciss = [];
@@ -44,6 +46,8 @@ function lookOverDom(){
 	var listM = $('#measureRadio');
 	var dimensionRadioButton = "dimensionRadioButton";
 	var measureRadioButton = "measureRadioButton";
+	var radio = "radio";
+	var checkbox = "checkbox";
 
 	//Get tableToJSON without the first colunm useless
 	var tableToJSON = $('table#extension').tableToJSON({ ignoreColumns: [0] });
@@ -63,7 +67,7 @@ function lookOverDom(){
 		$("input[name=dimensionRadioButton]:radio").each(function() {
 			if($(this).val() == a) i++;
 		});
-		$("input[name=measureRadioButton]:radio").each(function() {
+		$("input[name=measureRadioButton]:checkbox").each(function() {
 			if($(this).val() == a) j++;
 		});
 		if(i == 0 && j == 0 )
@@ -87,9 +91,10 @@ function lookOverDom(){
 			var isGeoCoord = (/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/g).test(withoutParentheses);
 
 			if(matches && matches[1]!= "en" && matches[1]!= "fr" && matches[1]!= "string" && !isNum && !isDate && !isGeoCoord) {
-				listM.append(makeRadioButton(measureRadioButton, a, a));  
+				addInput(listM, measureRadioButton, a, a, checkbox); 
 			}else{  
-				listDim.append(makeRadioButton(dimensionRadioButton, a, a));
+				addInput(listDim, dimensionRadioButton, a, a, radio); 
+
 			} 
 		}
 	});
@@ -104,19 +109,57 @@ function lookOverDom(){
 
 	});
 
-	//Measure selected  
-	$('input:radio[name=measureRadioButton]').click(function() {
-		ordonate = [];
+	//When an user selects interest in an addtional measure, add this to the additionalServices div
+	$('input:checkbox[name=measureRadioButton]').bind('change', function() {
+	    var alsoInterested = [];
+	    ordonate = [];
+	    ordonate_second = [];
+	    ordonate_third = [];
+	    $('input:checkbox[name=measureRadioButton]').each(function(index, value) {
+	        if (this.checked) {
+	            /*get name of measure associated with checkbox*/
+	            value = $(this).val();
+	            alsoInterested.add(value);
+	        }
+	    });
 
-		value = $(this).val();
-		var ordonateesIndex = headerTable.findIndex(value);
+	    finalTab = generateData(tableToJSON);
 
-		finalTab = generateData(tableToJSON);
+	    switch (alsoInterested.length) {
+			case 1:
+				generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
+				console.log(ordonate);
+				break;
+			case 2:
+				generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
+				generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
+				break;
+			case 3:
+				generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
+				generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
+				generateOrdonate(ordonate_third, alsoInterested[2], tableToJSON, headerTable);
+				break;
+			default:
+				break;
+		}
+	});
+}
+/*
+ * Running of Mutli Measures : 
+ * array ordonate : 3 max
+ * array tableToJSON : results of table named "extension"
+ * array headerTable : headers of tableToJSON
+ * string value : an header 
+ */
+function generateOrdonate(ordonate, value, tableToJSON, headerTable ){
 
-		finalTab[ordonateesIndex].forEach(function(a) {
-			var parseOrdonates = parseFloat(a);
-			ordonate.add(parseOrdonates);
-		});
+	var ordonateesIndex = headerTable.findIndex(value);
+
+	finalTab = generateData(tableToJSON);
+
+	finalTab[ordonateesIndex].forEach(function(a) {
+		var parseOrdonates = parseFloat(a);
+		ordonate.add(parseOrdonates);
 	});
 }
 
@@ -139,23 +182,21 @@ function generateData (tableToJSON){
 
 /*
  * Create RadioButton for Measure and Dimension
+ * string lcontainer 	: container which contains inputs (Radio or Checkbox)
  * string name  : RadioButton attr. 
  * string value : RadioButton attr.
  * string text  : Label contains text associated to the RadioButton
+ * sintrg type 	: "radio" or "checkbox"
  */ 
-function makeRadioButton(name, value, text) {
+function addInput(lcontainer, name, value, text, type) {
 
-	var label = document.createElement("label");
-	var radio = document.createElement("input");
-	radio.type = "radio";
-	radio.name = name;
-	radio.value = value;
+   var container = $(lcontainer);
+   var inputs = container.find('input');
 
-	label.appendChild(radio);
-
-	label.appendChild(document.createTextNode(text));
-	return label;
+   $('<input />', { type: type, name: name, value: value }).appendTo(container);
+   $('<label />', { 'for': name, text: value }).appendTo(container);
 }
+
 
 function addChart() {
 	var aera = document.getElementById("charts");
