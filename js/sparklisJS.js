@@ -97,6 +97,8 @@ function lookOverDom(){
 
 	//Measure selected  
 	$('input:radio[name=measureRadioButton]').click(function() {
+		ordonate = [];
+
 		value = $(this).val();
 		var ordonateesIndex = headerTable.findIndex(value);
 
@@ -116,7 +118,6 @@ function lookOverDom(){
 function generateData (tableToJSON){
 
 	var keys =  Object.keys(tableToJSON[0]);
-	ordonate = [];
 
 	var finalTab = keys.map(function(key) {
 		return tableToJSON.map(function(n) {
