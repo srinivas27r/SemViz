@@ -72,12 +72,21 @@ function lookOverDom(){
 			finalTab = generateData(tableToJSON);
 			var text = finalTab[abscissIndex].first()
 
-			//matches text contains the value between the parentheses
+			//get contains the value between the parentheses 
 			var regExp = /\(([^)]+)\)/;
 			var matches = regExp.exec(text);
-			var isnum = /\d+/g.test(matches);
 
-			if(matches && matches != "en" && matches != "fr" && matches != "string" && !isnum) {
+			//matches text contains numeric value
+			var isNum = /\d+/g.test(matches);
+
+			//matches text contains dd-mm-yyyy : date
+			var withoutParentheses = text.replace(/ *\([^)]*\) */g, "");
+			var isDate = (/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/g).test(withoutParentheses);
+
+			//matches text contains latitude and longitude coordinates : geographic coordinates 
+			var isGeoCoord = (/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/g).test(withoutParentheses);
+
+			if(matches && matches[1]!= "en" && matches[1]!= "fr" && matches[1]!= "string" && !isNum && !isDate && !isGeoCoord) {
 				listM.append(makeRadioButton(measureRadioButton, a, a));  
 			}else{  
 				listDim.append(makeRadioButton(dimensionRadioButton, a, a));
