@@ -25,8 +25,10 @@ var observer = new MutationObserver(function(mutations) {
 		for (var i = 0; i < mutation.addedNodes.length; i++){
 
 			if (mutation.addedNodes[i].id == 'extension') { 
+
 				lookOverDom();
 			}
+
 			if ($("#results").is(":hidden") ){
 				$("#control-charts").hide();
 			}
@@ -44,13 +46,19 @@ observer.observe(document, {
 
 function lookOverDom(){
 
+	//Initialize dimensions and metrics
+	$("#dimensions").html("");
+	$("#metrics").html("");
+	
 	//Radio Buttons
-	var listDim = $('#dimensionRadio');
-	var listM = $('#measureRadio');
+	var listDim = $('#dimensions');
+	var listM = $('#metrics');
 	var dimensionRadioButton = "dimensionRadioButton";
 	var measureRadioButton = "measureRadioButton";
 	var radio = "radio";
 	var checkbox = "checkbox";
+
+
 
 	//Get tableToJSON without the first colunm useless
 	var tableToJSON = $('table#extension').tableToJSON({ ignoreColumns: [0] });
@@ -82,6 +90,7 @@ function lookOverDom(){
 			//get contains the value between the parentheses 
 			var regExp = /\(([^)]+)\)/;
 			var matches = regExp.exec(text);
+			var isAllNum = /\d+/g.test(text);
 
 			//matches text contains numeric value
 			var isNum = /\d+/g.test(matches);
@@ -93,7 +102,8 @@ function lookOverDom(){
 			//matches text contains latitude and longitude coordinates : geographic coordinates 
 			var isGeoCoord = (/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/g).test(withoutParentheses);
 
-			if(matches && matches[1]!= "en" && matches[1]!= "fr" && matches[1]!= "string" && !isNum && !isDate && !isGeoCoord) {
+
+			if(matches && matches[1]!= "en" && matches[1]!= "fr" && matches[1]!= "string" && !isNum && !isDate && !isGeoCoord && isAllNum) {
 				addInput(listM, measureRadioButton, a, a, checkbox); 
 			}else{  
 				addInput(listDim, dimensionRadioButton, a, a, radio); 
@@ -112,7 +122,7 @@ function lookOverDom(){
 
 	});
 
-	//When an user selects interest in an addtional measure, add this to the additionalServices div
+	//When an user selects interest in an addtional measure, add this to alsoInterested
 	$('input:checkbox[name=measureRadioButton]').bind('change', function() {
 	    var alsoInterested = [];
 	    ordonate = [];
@@ -131,7 +141,6 @@ function lookOverDom(){
 	    switch (alsoInterested.length) {
 			case 1:
 				generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
-				console.log(ordonate);
 				break;
 			case 2:
 				generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
