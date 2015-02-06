@@ -211,27 +211,22 @@ function addInput(lcontainer, name, value, text, type) {
 
 
 
-function addChart() {
-	
+function addChart() {	
 	var aera = document.getElementById("charts");
-	
 	//create object to insert as a list object
-	//var chart = $('<li class="chart">').text("last chart added").appendTo(aera);
 	var chart = $('<li class="chart">').appendTo(aera); 
-	
+	//create the close button
+	$('<div class="close">Cliquer pour fermer</div>').appendTo(chart); 
+	//clone the current graph ino the list div 
 	var current = $('#graphe').clone().appendTo(chart); 
-	
-	
 	//add function in order to delete the list object
-	$('li.chart').click(function() {
-		$(this).remove();
+	$('.close').click(function() {
+		$(this).closest('li').remove();
 	});
 }
 
 
-function deleteChart(){
-	$(this).remove();
-}
+
 
 google.load('visualization', '1', {
 	packages : [ 'corechart' ]
