@@ -210,13 +210,24 @@ function addInput(lcontainer, name, value, text, type) {
 }
 
 
+
 function addChart() {
+	
 	var aera = document.getElementById("charts");
-	var chart = $('<li class="chart">').text("last chart added").appendTo(aera);
+	
+	//create object to insert as a list object
+	//var chart = $('<li class="chart">').text("last chart added").appendTo(aera);
+	var chart = $('<li class="chart">').appendTo(aera); 
+	
+	var current = $('#graphe').clone().appendTo(chart); 
+	
+	
+	//add function in order to delete the list object
 	$('li.chart').click(function() {
 		$(this).remove();
 	});
 }
+
 
 function deleteChart(){
 	$(this).remove();
