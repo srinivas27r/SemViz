@@ -1,110 +1,137 @@
 /*position fixe bouton inserer 
 height du graphe pour ne pas décaler toute la page*/
-.toggle{
- display:inline-block;
-}
-.toggle.expanded{
-}
-.content{
-width :100%; 
-}
-table #settings{
-	border:none; 
+.toggle {
+	display: inline-block;
 }
 
-#contenus-onglets{
-	heigth: 300px; 
+.toggle.expanded {
+	
 }
 
-#onglets
-		{
-			font : bold 11px Batang, arial, serif;
-			list-style-type : none;
-			padding-bottom : 24px; /* à modifier suivant la taille de la police ET de la hauteur de l'onglet dans #onglets li */
-			border-bottom : 1px solid #9EA0A1;
-			margin-left : 0;
-		}
-	  #onglets li
-		{
-			float : left;
-			height : 21px; /* à modifier suivant la taille de la police pour centrer le texte dans l'onglet */
-			background-color: #F4F9FD;
-			margin : 2px 2px 0 2px !important;  /* Pour les navigateurs autre que IE */
-			margin : 1px 2px 0 2px;  /* Pour IE  */
-			border : 1px solid #9EA0A1;
-		}
-	  #onglets a
-		{
-			display : block;
-			color : #666;
-			text-decoration : none;
-			padding : 4px;
-		}
-	  #onglets a:hover
-		{
-			background : #fff;
-		}
-		#onglets li.selected { 
-			border-bottom: 1px solid #fff;
-			background-color: #fff;
-		}
-		.input_hidden {
-			position: absolute;
-			left: -9999px;
-		}
+.content {
+	width: 100%;
+}
 
-		.selected {
-			background-color: #1560BD;
-		}
+table #settings {
+	border: none;
+}
 
-		#graphs label {
-			display: inline-block;
-			cursor: pointer;
-		}
+#contenus-onglets {
+	heigth: 300px;
+}
 
-		#graphs label:hover {
-			background-color: #efefef;
-		}
+#onglets {
+	font: bold 11px Batang, arial, serif;
+	list-style-type: none;
+	padding-bottom: 24px;
+	/* à modifier suivant la taille de la police ET de la hauteur de l'onglet dans #onglets li */
+	border-bottom: 1px solid #9EA0A1;
+	margin-left: 0;
+}
 
-		#graphs label img {
-			padding: 2px;
-		}
-		
-		#graphs2 label {
-			display: inline-block;
-			cursor: pointer;
-		}
+#onglets li {
+	float: left;
+	height: 21px;
+	/* à modifier suivant la taille de la police pour centrer le texte dans l'onglet */
+	background-color: #F4F9FD;
+	margin: 2px 2px 0 2px !important;
+	/* Pour les navigateurs autre que IE */
+	margin: 1px 2px 0 2px; /* Pour IE  */
+	border: 1px solid #9EA0A1;
+}
 
-		#graphs2 label:hover {
-			background-color: #efefef;
-		}
+#onglets a {
+	display: block;
+	color: #666;
+	text-decoration: none;
+	padding: 4px;
+}
 
-		#graphs2 label img {
-			padding: 2px;
-		}
-		
-		#titre label {
-			display: inline-block;
-			cursor: pointer;
-		}
+#onglets a:hover {
+	background: #fff;
+}
 
-		#titre label:hover {
-			background-color: #efefef;
-		}
+#onglets li.selected {
+	border-bottom: 1px solid #fff;
+	background-color: #fff;
+}
 
-		#titre label img {
-			padding: 2px;
-		}
-		
-		#legende label {
-			display: inline-block;
-			cursor: pointer;
-		}
+.input_hidden {
+	position: absolute;
+	left: -9999px;
+}
 
-		#legende label:hover {
-			background-color: #efefef;
-		}
+.selected {
+	background-color: #1560BD;
+}
 
-		#legende label img {
-			padding: 2px;
-		}
+#graphs label {
+	display: inline-block;
+	cursor: pointer;
+}
+
+#graphs label:hover {
+	background-color: #efefef;
+}
+
+#graphs label img {
+	padding: 2px;
+}
+
+#graphs2 label {
+	display: inline-block;
+	cursor: pointer;
+}
+
+#graphs2 label:hover {
+	background-color: #efefef;
+}
+
+#graphs2 label img {
+	padding: 2px;
+}
+
+#titre label {
+	display: inline-block;
+	cursor: pointer;
+}
+
+#titre label:hover {
+	background-color: #efefef;
+}
+
+#titre label img {
+	padding: 2px;
+}
+
+#legende label {
+	display: inline-block;
+	cursor: pointer;
+}
+
+#legende label:hover {
+	background-color: #efefef;
+}
+
+#legende label img {
+	padding: 2px;
+}
+
+#charts {
+	margin-left: 250px;
+	margin-top:20px;
+	list-style-type: none;
+}
+
+.chart {
+	margin-top: 10px;
+	background-color: #efefef;
+	padding: 10px;
+	width:1000px;
+}
+
+.modify{
+	margin-left: 75px;
+    margin-top: -20px;
+    position: absolute;
+}

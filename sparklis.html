@@ -516,12 +516,12 @@
 				<div id="dimensionRadio">
 					<span class="texte lang-en">Choose a dimension</span> <span
 						class="texte lang-fr">Choisissez une dimension</span>
-						<div id="dimensions"></div>
+					<div id="dimensions"></div>
 				</div>
 				<div id="measureRadio">
 					<span class="texte lang-en">Choose a measure</span> <span
 						class="texte lang-fr">Choisissez une mesure</span>
-						<div id="metrics"></div>
+					<div id="metrics"></div>
 
 				</div>
 
@@ -552,16 +552,18 @@
 								</p>
 								<input type="checkbox" name="intervertirLC" id="intervertirLC" />
 								<label for="intervertirLC">Intervertir lignes et
-									colonnes</label> <br /> <br /> <b>Graphiques
-									recommandés</b> <a href="#">Autres >></a><br />
+									colonnes</label> <br /> <br /> <b>Graphiques recommandés</b> <a
+									href="#">Autres >></a><br />
 								<div id="graphs">
 									<input type="radio" name="graphs" id="graph1" value="graph1"
-										onclick="submit('line',$('#chartTitle').val(), $('#boldTitle').is(':checked'), $('#italicTitle').is(':checked'), $('#fontSizeTitle').val(), $('#colorTitle').val(), $('#boldTitleLegend').is(':checked'), $('#italicTitleLegend').is(':checked'), $('#fontSizeTitleLegend').val(), $('#colorTitleLegend').val(), $('#fontName').val(), $('#backgroundColorChart').val());" /><label for="graph1"><img
-										src="resources/chart/graph1.png" " alt="graph1" /></label> <input
-										type="radio" name="graphs" id="graph2" value="graph2"
-										onclick="submit('histo_horizontal',$('#chartTitle').val(), $('#boldTitle').is(':checked'), $('#italicTitle').is(':checked'), $('#fontSizeTitle').val(), $('#colorTitle').val(), $('#boldTitleLegend').is(':checked'), $('#italicTitleLegend').is(':checked'), $('#fontSizeTitleLegend').val(), $('#colorTitleLegend').val(), $('#fontName').val(), $('#backgroundColorChart').val());" /><label for="graph2"><img
-										src="resources/chart/graph2.png" " alt="graph2" /></label><br /> <input
-										type="radio" name="graphs" id="graph3" value="graph3"
+										onclick="submit('line',$('#chartTitle').val(), $('#boldTitle').is(':checked'), $('#italicTitle').is(':checked'), $('#fontSizeTitle').val(), $('#colorTitle').val(), $('#boldTitleLegend').is(':checked'), $('#italicTitleLegend').is(':checked'), $('#fontSizeTitleLegend').val(), $('#colorTitleLegend').val(), $('#fontName').val(), $('#backgroundColorChart').val());" /><label
+										for="graph1"><img src="resources/chart/graph1.png"
+										" alt="graph1" /></label> <input type="radio" name="graphs"
+										id="graph2" value="graph2"
+										onclick="submit('histo_horizontal',$('#chartTitle').val(), $('#boldTitle').is(':checked'), $('#italicTitle').is(':checked'), $('#fontSizeTitle').val(), $('#colorTitle').val(), $('#boldTitleLegend').is(':checked'), $('#italicTitleLegend').is(':checked'), $('#fontSizeTitleLegend').val(), $('#colorTitleLegend').val(), $('#fontName').val(), $('#backgroundColorChart').val());" /><label
+										for="graph2"><img src="resources/chart/graph2.png"
+										" alt="graph2" /></label><br /> <input type="radio" name="graphs"
+										id="graph3" value="graph3"
 										onclick="submit('histo_vertical',$('#chartTitle').val(), $('#boldTitle').is(':checked'), $('#italicTitle').is(':checked'), $('#fontSizeTitle').val(), $('#colorTitle').val(), $('#boldTitleLegend').is(':checked'), $('#italicTitleLegend').is(':checked'), $('#fontSizeTitleLegend').val(), $('#colorTitleLegend').val(), $('#fontName').val(), $('#backgroundColorChart').val());" /><label
 										for="graph3"><img src="resources/chart/graph3.png"
 										alt="graph3" /></label> <input type="radio" name="graphs" id="graph4"
@@ -628,8 +630,8 @@
 									<input type="checkbox" name="boldTitleLegend"
 										id="boldTitleLegend" value="boldTitleLegend" /><label
 										for="boldTitleLegend"><img
-										src="resources/chart/bold.png" " alt="boldTitleLegend" /></label>
-									<input type="checkbox" name="italicTitleLegend"
+										src="resources/chart/bold.png" " alt="boldTitleLegend" /></label> <input
+										type="checkbox" name="italicTitleLegend"
 										id="italicTitleLegend" value="italicTitleLegend" /><label
 										for="italicTitleLegend"><img
 										src="resources/chart/italic.png" " alt="italicTitleLegend" /></label>
@@ -704,10 +706,10 @@
 
 
 		</div>
-
+		<ul id="charts"></ul>
 	</div>
 	<!-- zone intégration graphique -->
-	<ul id="charts"></ul>
+
 	<!-- NEW END ---------------------------------------------------------------------->
 
 	<div id="sparql">

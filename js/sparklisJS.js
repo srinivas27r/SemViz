@@ -215,13 +215,19 @@ function addChart() {
 	var aera = document.getElementById("charts");
 	//create object to insert as a list object
 	var chart = $('<li class="chart">').appendTo(aera); 
-	//create the close button
-	$('<div class="close">Cliquer pour fermer</div>').appendTo(chart); 
+	// close button
+	$('<div class="close"><img id="delete-current-focus" height="16" title="Click on this red cross to delete the current focus" alt="Delete" src="icon-delete.png"></div>').appendTo(chart); 
+	//modify button
+	$('<div class="modify">Modify</div>').appendTo(chart);
 	//clone the current graph ino the list div 
 	var current = $('#graphe').clone().appendTo(chart); 
 	//add function in order to delete the list object
 	$('.close').click(function() {
 		$(this).closest('li').remove();
+	});
+	
+	$('.modify').click(function() {
+		alert('Not available yet ! '); 
 	});
 }
 
