@@ -15,8 +15,11 @@ var ordonate_second = [];
 var ordonate_third = []
 var graphe_title = [];
 
+var graph_compte_mesure = 0;
 var graph_absciss = [];
 var graph_ordonate = [];
+var graph_ordonate_second = [];
+var graph_ordonate_third = [];
 
 //MO reacts to changes in a DOM. It detects when 'extension' appears.
 var observer = new MutationObserver(function(mutations) {
@@ -252,6 +255,7 @@ function in_array(string, array){
 	return result;
 }
 
+//function aggregator count, counting the number of times an item is present in the table
 function aggreg_count() {
 	graph_ordonate= [];
 	graph_absciss = [];
@@ -272,18 +276,51 @@ function aggreg_count() {
 	}
 }
 
+//function aggregator sum, if there are two (or more) same item in the array, it add their measure
 function aggreg_somme() {
 	graph_ordonate= [];
+	graph_ordonate_second= [];
+	graph_ordonate_third= [];
 	graph_absciss = [];
 	var increm =0;
 	for (var i = 0; i < absciss.length; i++) {
 		if (!in_array(absciss[i],graph_absciss)){
-			graph_ordonate [increm] = ordonate[i];
+			switch (graph_compte_mesure) {
+			case 1:
+				graph_ordonate [increm] = ordonate[i];
+				break;
+			case 2:
+				graph_ordonate [increm] = ordonate[i];
+				graph_ordonate_second [increm]= ordonate_second[i];
+				break;
+			case 3:
+				graph_ordonate [increm] = ordonate[i];
+				graph_ordonate_second [increm]= ordonate_second[i];
+				graph_ordonate_third [increm]= ordonate_third[i];
+				break;
+			default:
+				graph_ordonate [increm] = ordonate[i];
+			}
 			graph_absciss.add(absciss[i]);
 			for (var y=0; y < absciss.length; y++) {
 				if (i!=y) {
 					if (absciss[i]==absciss[y]){
-						graph_ordonate [increm] = graph_ordonate[increm]+ordonate[y];
+						switch (graph_compte_mesure) {
+						case 1:
+							graph_ordonate [increm] = graph_ordonate[increm]+ordonate[y];
+							break;
+						case 2:
+							graph_ordonate [increm] = graph_ordonate[increm]+ordonate[y];
+							graph_ordonate_second [increm]= graph_ordonate_second [increm]+ordonate_second[y];
+							break;
+						case 3:
+							graph_ordonate [increm] = graph_ordonate[increm]+ordonate[y];
+							graph_ordonate_second [increm]= graph_ordonate_second [increm]+ordonate_second[y];
+							graph_ordonate_third [increm]= graph_ordonate_third [increm]+ordonate_third[y];
+							break;
+						default:
+							graph_ordonate [increm] = graph_ordonate[increm]+ordonate[y];
+						}
 					}
 				}
 			}
@@ -292,32 +329,97 @@ function aggreg_somme() {
 	}
 }
 
+//function aggregator average, if there are two (or more) same item in the array, it makes an average of their measure
 function aggreg_moyenne() {
 	graph_ordonate= [];
+	graph_ordonate_second= [];
+	graph_ordonate_third= [];
 	graph_absciss = [];
 	var increm = 0;
 	for (var i = 0; i < absciss.length; i++) {
 		if (!in_array(absciss[i],graph_absciss)){
-			graph_ordonate [increm] = ordonate[i];
+			switch (graph_compte_mesure) {
+			case 1:
+				graph_ordonate [increm] = ordonate[i];
+				break;
+			case 2:
+				graph_ordonate [increm] = ordonate[i];
+				graph_ordonate_second [increm] = ordonate_second[i];
+				break;
+			case 3:
+				graph_ordonate [increm] = ordonate[i];
+				graph_ordonate_second [increm] = ordonate_second[i];
+				graph_ordonate_third [increm] = ordonate_third[i];
+				
+				break;
+			default:
+				graph_ordonate [increm] = ordonate[i];
+			}
 			graph_absciss.add(absciss[i]);
 			var count = 1;
 			for (var y=0; y < absciss.length; y++) {
 				if (i!=y) {
 					if (absciss[i]==absciss[y]){
-						graph_ordonate [increm] = graph_ordonate[increm]+ordonate[y];
+						switch (graph_compte_mesure) {
+						case 1:
+							graph_ordonate [increm] = graph_ordonate[increm]+ordonate[y];
+							break;
+						case 2:
+							graph_ordonate [increm] = graph_ordonate[increm]+ordonate[y];
+							graph_ordonate_second [increm] = graph_ordonate_second [increm] +ordonate_second[y];
+							break;
+						case 3:
+							graph_ordonate [increm] = graph_ordonate[increm]+ordonate[y];
+							graph_ordonate_second [increm] = graph_ordonate_second [increm] +ordonate_second[y];
+							graph_ordonate_third [increm] = graph_ordonate_third [increm] + ordonate_third[y];
+							break;
+						default:
+							graph_ordonate [increm] = graph_ordonate[increm]+ordonate[y];
+						}
 						count++;
 					}
 				}
 			}
-			graph_ordonate [increm] = graph_ordonate [increm]/count;
+			switch (graph_compte_mesure) {
+			case 1:
+				graph_ordonate [increm] = graph_ordonate [increm]/count;
+				break;
+			case 2:
+				graph_ordonate [increm] = graph_ordonate [increm]/count;
+				graph_ordonate_second [increm] = graph_ordonate_second [increm]/count;
+				break;
+			case 3:
+				graph_ordonate [increm] = graph_ordonate [increm]/count;
+				graph_ordonate_second [increm] = graph_ordonate_second [increm]/count;
+				graph_ordonate_third [increm] = graph_ordonate_third [increm]/count;
+				break;
+			default:
+				graph_ordonate [increm] = graph_ordonate [increm]/count;
+			}
 			increm = increm+1;
 		}
 	}
 }
 
+//function agregator no-one, it's just a function when the user doesn't want the aggregator system
 function aggreg_aucun() {
-	graph_ordonate= ordonate;
 	graph_absciss = absciss;
+	switch (graph_compte_mesure) {
+	case 1:
+		graph_ordonate= ordonate;
+		break;
+	case 2:
+		graph_ordonate= ordonate;
+		graph_ordonate_second = ordonate_second;
+		break;
+	case 3:
+		graph_ordonate= ordonate;
+		graph_ordonate_second = ordonate_second;
+		graph_ordonate_third = ordonate_third;
+		break;
+	default:
+		aggreg_count();
+	}
 }
 
 function submit(bout, chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTitle, boldTitleLegend, italicTitleLegend, fontSizeTitleLegend, colorTitleLegend, fontNameChart, backgroundColorChart) {
@@ -346,7 +448,24 @@ function submit(bout, chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTi
 				document.ajax.dyn = "Error code " + xhr.status;
 		}
 	};
-
+	
+	// compte le nombre de mesure selectionne
+	// cas ou une seule mesure est selectionne
+	if (ordonate_third.length==0 && ordonate_second.length==0 && ordonate.length!=0) {
+		graph_compte_mesure = 1;
+	}
+	//cas ou deux mesures sont selectionne
+	else if (ordonate_third.length==0 && ordonate_second.length!=0) {
+		graph_compte_mesure = 2;
+	}
+	// cas ou trois mesures sont selectionne
+	else if (ordonate_third.length != 0) {
+		graph_compte_mesure = 3;
+	}
+	else {
+		graph_compte_mesure = 0;
+	}
+	
 	// choix de l'aggregation
 	var aggreg = document.getElementById("aggregator").value;
 	switch (aggreg) {
@@ -360,9 +479,16 @@ function submit(bout, chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTi
 		aggreg_moyenne();
 		break;
 	case 'Aucun':
-		aggreg_aucun();
+		if (graph_compte_mesure==0) {
+			aggreg_count();
+		}
+		else {
+			aggreg_aucun();
+		}
+		
 		break;
 	default:
+		aggreg_aucun();
 		alert('TEST =' + document.getElementById("aggregator").value);
 	}
 	// choix du type de graphique
@@ -388,8 +514,10 @@ function submit(bout, chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTi
 	default:
 		alert('revoir les parametres');
 	}
+	graph_compte_mesure = 0;
 }
 
+/*
 function drawPointChart() {
 	var data_point = new google.visualization.DataTable();
 	data_point.addColumn('string', 'X');
@@ -434,7 +562,8 @@ function drawMapChart() {
 	chart_graph.draw(data_graph, options_graph);
 
 }
-
+*/
+//graphique type camanbert
 function drawPieChart() {
 	var data_pie = new google.visualization.DataTable();
 	data_pie.addColumn('string', 'X');
@@ -458,15 +587,10 @@ function drawPieChart() {
 
 }
 
+//graphique type histogramme vertical
 function drawBarChart_vertical(chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTitle, boldTitleLegend, italicTitleLegend, fontSizeTitleLegend, colorTitleLegend, fontNameChart, backgroundColorChart) {
-	var data_bar = new google.visualization.DataTable();
-	data_bar.addColumn('string', 'X');
-	data_bar.addColumn('number', 'People');
-
-	//here we insert the data from our two table
-	for (var i = 0; i < graph_absciss.length; i++) {
-		data_bar.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
-	}
+	var data_for_googleChart = insertData();
+	
 	// here the option of our representation
 	var options_bar = {
 			title : chartTitle,
@@ -499,18 +623,13 @@ function drawBarChart_vertical(chartTitle, boldTitle, italicTitle, fontSizeTitle
 	// we choose the area where we want to put our charts
 	var chart_column = new google.visualization.ColumnChart(document
 			.getElementById('graphe'));
-	chart_column.draw(data_bar, options_bar);
+	chart_column.draw(data_for_googleChart, options_bar);
 }
 
+// graphique type histogramme horizontal
 function drawBarChart_horizontal(chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTitle, boldTitleLegend, italicTitleLegend, fontSizeTitleLegend, colorTitleLegend, fontNameChart, backgroundColorChart) {
-	var data_bar = new google.visualization.DataTable();
-	data_bar.addColumn('string', 'X');
-	data_bar.addColumn('number', 'People');
-
-	//here we insert the data from our two table
-	for (var i = 0; i < graph_absciss.length; i++) {
-		data_bar.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
-	}
+	var data_for_googleChart = insertData();
+	
 	var options_bar = {
 			title : chartTitle,
 			titleTextStyle : {
@@ -542,18 +661,13 @@ function drawBarChart_horizontal(chartTitle, boldTitle, italicTitle, fontSizeTit
 
 	var chart_bar = new google.visualization.BarChart(document
 			.getElementById('graphe'));
-	chart_bar.draw(data_bar, options_bar);
+	chart_bar.draw(data_for_googleChart, options_bar);
 }
 
+//graphique type courbe
 function drawLineChart(chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTitle, boldTitleLegend, italicTitleLegend, fontSizeTitleLegend, colorTitleLegend, fontNameChart, backgroundColorChart) {
-	var data_line = new google.visualization.DataTable();
-	data_line.addColumn('string', 'X');
-	data_line.addColumn('number', 'People');
-
-	//here we insert the data from our two table
-	for (var i = 0; i < graph_absciss.length; i++) {
-		data_line.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
-	}
+	var data_for_googleChart = insertData();
+	
 	// here the option of our representation
 	var options_line = {
 			title : chartTitle,
@@ -586,5 +700,47 @@ function drawLineChart(chartTitle, boldTitle, italicTitle, fontSizeTitle, colorT
 	// we choose the area where we want to put our charts
 	var chart_line = new google.visualization.LineChart(document
 			.getElementById('graphe'));
-	chart_line.draw(data_line, options_line);
+	chart_line.draw(data_for_googleChart, options_line);
+}
+
+// function to insert data in charts
+function insertData() {
+	var tables = new google.visualization.DataTable();
+	switch (graph_compte_mesure) {
+	case 1:
+		//here we insert the data from our one mesure
+		tables.addColumn('string', 'X');
+		tables.addColumn('number', 'Y');
+		for (var i = 0; i < graph_absciss.length; i++) {
+			tables.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
+		}
+		break;
+	case 2:
+		//here we insert the data from our two mesures
+		tables.addColumn('string', 'X');
+		tables.addColumn('number', 'Y');
+		tables.addColumn('number', 'Z');
+		for (var i = 0; i < graph_absciss.length; i++) {
+			tables.addRows([ [ graph_absciss[i], graph_ordonate[i], graph_ordonate_second[i] ] ])
+		}
+		break;
+	case 3:
+		//here we insert the data from our three mesures
+		tables.addColumn('string', 'X');
+		tables.addColumn('number', 'Y');
+		tables.addColumn('number', 'Z');
+		tables.addColumn('number', 'T');
+		for (var i = 0; i < graph_absciss.length; i++) {
+			tables.addRows([ [ graph_absciss[i], graph_ordonate[i], graph_ordonate_second [i], graph_ordonate_third [i] ] ])
+		}
+		break;
+	default:
+		//here we insert the data from our two mesures
+		tables.addColumn('string', 'X');
+		tables.addColumn('number', 'Y');
+		for (var i = 0; i < graph_absciss.length; i++) {
+			tables.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
+		}
+	}
+	return tables;
 }
