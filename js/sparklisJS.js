@@ -14,8 +14,6 @@ var ordonate = [];
 var ordonate_second = [];
 var ordonate_third = []
 var graphe_title = [];
-var currentChart = "";
-
 
 var graph_compte_mesure = 0;
 var graph_absciss = [];
@@ -32,10 +30,6 @@ var observer = new MutationObserver(function(mutations) {
 			if (mutation.addedNodes[i].id == 'extension') { 
 
 				lookOverDom();
-				//Reload chart if a chart type was selected
-				if(currentChart!=""){
-					submit(currentChart);
-				}
 			}
 
 			if ($("#results").is(":hidden") ){
@@ -214,7 +208,7 @@ function addInput(lcontainer, name, value, text, type) {
 	var container = $(lcontainer);
 	var inputs = container.find('input');
 
-	$('<input />', { type: type, name: name, value: value, id: name }).appendTo(container);
+	$('<input />', { type: type, name: name, value: value }).appendTo(container);
 	$('<label />', { 'for': name, text: value }).appendTo(container);
 }
 
@@ -440,7 +434,6 @@ function aggreg_aucun() {
 }
 
 function submit(bout, chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTitle, boldTitleLegend, italicTitleLegend, fontSizeTitleLegend, colorTitleLegend, fontNameChart, backgroundColorChart) {
-	currentChart = bout;
 	var xhr;
 	try { // Essayer IE
 		xhr = new ActiveXObject('Msxml2.XMLHTTP');
@@ -762,21 +755,3 @@ function insertData() {
 	}
 	return tables;
 }
-
-$( "#personnaliser" ).bind( "click submit", function() {
-	submit(currentChart);
-});
-
-$( "#metrics" ).bind( "click submit", function() {
-	//Reload chart if a chart type was selected
-	if(currentChart!=""){
-		submit(currentChart);
-	}
-});
-
-$( "#dimensions" ).bind( "click submit", function() {
-	//Reload chart if a chart type was selected
-	if(currentChart!=""){
-		submit(currentChart);
-	}
-});
