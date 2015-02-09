@@ -50,8 +50,8 @@ observer.observe(document, {
 function lookOverDom(){
 
 	//Initialize dimensions and metrics
-	$("#dimensions").html("");
-	$("#metrics").html("");
+	// $("#dimensions").html("");
+	// $("#metrics").html("");
 
 	//Radio Buttons
 	var listDim = $('#dimensions');
@@ -113,10 +113,35 @@ function lookOverDom(){
 
 			} 
 		}
+		updateInput();
 	});
+
+	// Delete useless inputs
+	 function updateInput() {         
+	     var allVals = [];
+	     $("input[name=dimensionRadioButton]:radio").each(function() {
+			allVals.push($(this).val());
+		});
+		$("input[name=measureRadioButton]:checkbox").each(function() {
+			allVals.push($(this).val());
+		});
+
+		for(var i= 0; i < allVals.length; i++)
+		{
+     		if(headerTable.findIndex(allVals[i]) < 0){
+     			var nameSpace = allVals[i].remove("'")
+				nameSpace = nameSpace.underscore();;
+
+     			$('#'+nameSpace).remove();
+     			$('#'+nameSpace+"1").remove();
+
+     		}
+		}
+  	}
 
 	//Dimension selected  
 	$('input:radio[name=dimensionRadioButton]').click(function() {
+		absciss = [];
 		value = $(this).val();
 		var abscissIndex = headerTable.findIndex(value);
 		finalTab = generateData(tableToJSON);
@@ -207,9 +232,11 @@ function addInput(lcontainer, name, value, text, type) {
 
 	var container = $(lcontainer);
 	var inputs = container.find('input');
+	var nameSpace = value.remove("'")
+	nameSpace = nameSpace.underscore();
 
-	$('<input />', { type: type, name: name, value: value }).appendTo(container);
-	$('<label />', { 'for': name, text: value }).appendTo(container);
+	$('<input />', { type: type, name: name, value: value, id:nameSpace }).appendTo(container);
+	$('<label />', { 'for': name, text: value, id:nameSpace+"1" }).appendTo(container);
 }
 
 
