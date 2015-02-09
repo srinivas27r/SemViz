@@ -232,6 +232,21 @@ function addChart() {
 	$('.modify').click(function() {
 		alert('Not available yet ! '); 
 	});
+	
+	
+	
+/*
+	$('li').click(function() {
+		if ($(this).hasClass('chart')){
+			$(this).removeClass('chart').addClass('chart').addClass(' active');
+		}
+		else if ($(this).hasClass('chartactive')){
+			$(this).removeClass('chartactive').addClass('chart');
+		}
+		
+		
+	});
+	*/
 }
 
 

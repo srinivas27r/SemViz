@@ -118,9 +118,10 @@ table #settings {
 }
 
 #charts {
-	margin-left: 250px;
-	margin-top: 20px;
+	margin-left: 10px;
+	margin-top: 10px;
 	list-style-type: none;
+	width: 100%;
 }
 
 .chart {
@@ -128,6 +129,8 @@ table #settings {
 	background-color: #efefef;
 	padding: 10px;
 	width: 1000px;
+	float: left;
+	display: block;
 	zoom: 0.5;
 	-ms-zoom: 0.5;
 	-webkit-zoom: 0.5;
@@ -136,16 +139,23 @@ table #settings {
 }
 
 .chart:hover {
-	margin-top: 10px;
-	background-color: #efefef;
-	padding: 10px;
-	width: 1000px;
 	zoom: 1;
 	-ms-zoom: 1;
 	-webkit-zoom: 1;
 	-moz-transform: scale(1, 1);
 	-moz-transform-origin: left center;
+
 }
+
+.chartactive{
+	zoom: 1;
+	-ms-zoom: 1;
+	-webkit-zoom: 1;
+	-moz-transform: scale(1, 1);
+	-moz-transform-origin: left center;
+
+}
+
 
 .modify {
 	margin-left: 75px;
