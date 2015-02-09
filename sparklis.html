@@ -555,20 +555,20 @@
 									colonnes</label> <br /> <br /> <b>Graphiques recommandés</b> <a
 									href="#">Autres >></a><br />
 								<div id="graphs">
-									<input type="radio" name="graphs" id="graph1" value="graph1"
-										onclick="submit('line',$('#chartTitle').val(), $('#boldTitle').is(':checked'), $('#italicTitle').is(':checked'), $('#fontSizeTitle').val(), $('#colorTitle').val(), $('#boldTitleLegend').is(':checked'), $('#italicTitleLegend').is(':checked'), $('#fontSizeTitleLegend').val(), $('#colorTitleLegend').val(), $('#fontName').val(), $('#backgroundColorChart').val());" /><label
-										for="graph1"><img src="resources/chart/graph1.png"
-										" alt="graph1" /></label> <input type="radio" name="graphs"
-										id="graph2" value="graph2"
-										onclick="submit('histo_horizontal',$('#chartTitle').val(), $('#boldTitle').is(':checked'), $('#italicTitle').is(':checked'), $('#fontSizeTitle').val(), $('#colorTitle').val(), $('#boldTitleLegend').is(':checked'), $('#italicTitleLegend').is(':checked'), $('#fontSizeTitleLegend').val(), $('#colorTitleLegend').val(), $('#fontName').val(), $('#backgroundColorChart').val());" /><label
-										for="graph2"><img src="resources/chart/graph2.png"
-										" alt="graph2" /></label><br /> <input type="radio" name="graphs"
-										id="graph3" value="graph3"
-										onclick="submit('histo_vertical',$('#chartTitle').val(), $('#boldTitle').is(':checked'), $('#italicTitle').is(':checked'), $('#fontSizeTitle').val(), $('#colorTitle').val(), $('#boldTitleLegend').is(':checked'), $('#italicTitleLegend').is(':checked'), $('#fontSizeTitleLegend').val(), $('#colorTitleLegend').val(), $('#fontName').val(), $('#backgroundColorChart').val());" /><label
-										for="graph3"><img src="resources/chart/graph3.png"
-										alt="graph3" /></label> <input type="radio" name="graphs" id="graph4"
-										value="graph4" onclick="submit('pie');" /><label for="graph4"><img
-										src="resources/chart/graph4.png" alt="graph4" /></label>
+									<input type="radio" name="graphs" id="line" value="line"
+										onclick="submit('line');" /><label
+										for="line"><img src="resources/chart/graph1.png"
+										" alt="line" /></label> <input type="radio" name="graphs"
+										id="histo_vertical" value="histo_vertical"
+										onclick="submit('histo_horizontal');" /><label
+										for="histo_vertical"><img src="resources/chart/graph2.png"
+										" alt="histo_vertical" /></label><br /> <input type="radio" name="graphs"
+										id="histo_horizontal" value="histo_horizontal"
+										onclick="submit('histo_vertical');" /><label
+										for="histo_horizontal"><img src="resources/chart/graph3.png"
+										alt="histo_horizontal" /></label> <input type="radio" name="graphs" id="pie"
+										value="pie" onclick="submit('pie');" /><label for="pie"><img
+										src="resources/chart/graph4.png" alt="pie" /></label>
 								</div>
 								<!--<button onclick="submit('point');">Point Chart</button>
 						<button onclick="submit('map');">Map Chart</button>-->
