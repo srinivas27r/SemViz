@@ -52,7 +52,7 @@ function lookOverDom(){
 	//Initialize dimensions and metrics
 	$("#dimensions").html("");
 	$("#metrics").html("");
-	
+
 	//Radio Buttons
 	var listDim = $('#dimensions');
 	var listM = $('#metrics');
@@ -127,35 +127,35 @@ function lookOverDom(){
 
 	//When an user selects interest in an addtional measure, add this to alsoInterested
 	$('input:checkbox[name=measureRadioButton]').bind('change', function() {
-	    var alsoInterested = [];
-	    ordonate = [];
-	    ordonate_second = [];
-	    ordonate_third = [];
-	    $('input:checkbox[name=measureRadioButton]').each(function(index, value) {
-	        if (this.checked) {
-	            /*get name of measure associated with checkbox*/
-	            value = $(this).val();
-	            alsoInterested.add(value);
-	        }
-	    });
+		var alsoInterested = [];
+		ordonate = [];
+		ordonate_second = [];
+		ordonate_third = [];
+		$('input:checkbox[name=measureRadioButton]').each(function(index, value) {
+			if (this.checked) {
+				/*get name of measure associated with checkbox*/
+				value = $(this).val();
+				alsoInterested.add(value);
+			}
+		});
 
-	    finalTab = generateData(tableToJSON);
+		finalTab = generateData(tableToJSON);
 
-	    switch (alsoInterested.length) {
-			case 1:
-				generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
-				break;
-			case 2:
-				generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
-				generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
-				break;
-			case 3:
-				generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
-				generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
-				generateOrdonate(ordonate_third, alsoInterested[2], tableToJSON, headerTable);
-				break;
-			default:
-				break;
+		switch (alsoInterested.length) {
+		case 1:
+			generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
+			break;
+		case 2:
+			generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
+			generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
+			break;
+		case 3:
+			generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
+			generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
+			generateOrdonate(ordonate_third, alsoInterested[2], tableToJSON, headerTable);
+			break;
+		default:
+			break;
 		}
 	});
 }
@@ -205,11 +205,11 @@ function generateData (tableToJSON){
  */ 
 function addInput(lcontainer, name, value, text, type) {
 
-   var container = $(lcontainer);
-   var inputs = container.find('input');
+	var container = $(lcontainer);
+	var inputs = container.find('input');
 
-   $('<input />', { type: type, name: name, value: value }).appendTo(container);
-   $('<label />', { 'for': name, text: value }).appendTo(container);
+	$('<input />', { type: type, name: name, value: value }).appendTo(container);
+	$('<label />', { 'for': name, text: value }).appendTo(container);
 }
 
 
@@ -228,25 +228,23 @@ function addChart() {
 	$('.close').click(function() {
 		$(this).closest('li').remove();
 	});
-	
+
 	$('.modify').click(function() {
 		alert('Not available yet ! '); 
 	});
-	
-	
-	
-/*
+
+
+
+
 	$('li').click(function() {
-		if ($(this).hasClass('chart')){
-			$(this).removeClass('chart').addClass('chart').addClass(' active');
+		if ($(this).hasClass('active')){
+			$(this).removeClass('active');
 		}
-		else if ($(this).hasClass('chartactive')){
-			$(this).removeClass('chartactive').addClass('chart');
+		else {
+			$(this).addClass('active');
 		}
-		
-		
 	});
-	*/
+
 }
 
 
@@ -365,7 +363,7 @@ function aggreg_moyenne() {
 				graph_ordonate [increm] = ordonate[i];
 				graph_ordonate_second [increm] = ordonate_second[i];
 				graph_ordonate_third [increm] = ordonate_third[i];
-				
+
 				break;
 			default:
 				graph_ordonate [increm] = ordonate[i];
@@ -463,7 +461,7 @@ function submit(bout, chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTi
 				document.ajax.dyn = "Error code " + xhr.status;
 		}
 	};
-	
+
 	// compte le nombre de mesure selectionne
 	// cas ou une seule mesure est selectionne
 	if (ordonate_third.length==0 && ordonate_second.length==0 && ordonate.length!=0) {
@@ -480,7 +478,7 @@ function submit(bout, chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTi
 	else {
 		graph_compte_mesure = 0;
 	}
-	
+
 	// choix de l'aggregation
 	var aggreg = document.getElementById("aggregator").value;
 	switch (aggreg) {
@@ -500,11 +498,11 @@ function submit(bout, chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTi
 		else {
 			aggreg_aucun();
 		}
-		
+
 		break;
 	default:
 		aggreg_aucun();
-		alert('TEST =' + document.getElementById("aggregator").value);
+	alert('TEST =' + document.getElementById("aggregator").value);
 	}
 	// choix du type de graphique
 	switch (bout) {
@@ -577,7 +575,7 @@ function drawMapChart() {
 	chart_graph.draw(data_graph, options_graph);
 
 }
-*/
+ */
 //graphique type camanbert
 function drawPieChart() {
 	var data_pie = new google.visualization.DataTable();
@@ -605,7 +603,7 @@ function drawPieChart() {
 //graphique type histogramme vertical
 function drawBarChart_vertical(chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTitle, boldTitleLegend, italicTitleLegend, fontSizeTitleLegend, colorTitleLegend, fontNameChart, backgroundColorChart) {
 	var data_for_googleChart = insertData();
-	
+
 	// here the option of our representation
 	var options_bar = {
 			title : chartTitle,
@@ -641,10 +639,10 @@ function drawBarChart_vertical(chartTitle, boldTitle, italicTitle, fontSizeTitle
 	chart_column.draw(data_for_googleChart, options_bar);
 }
 
-// graphique type histogramme horizontal
+//graphique type histogramme horizontal
 function drawBarChart_horizontal(chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTitle, boldTitleLegend, italicTitleLegend, fontSizeTitleLegend, colorTitleLegend, fontNameChart, backgroundColorChart) {
 	var data_for_googleChart = insertData();
-	
+
 	var options_bar = {
 			title : chartTitle,
 			titleTextStyle : {
@@ -682,7 +680,7 @@ function drawBarChart_horizontal(chartTitle, boldTitle, italicTitle, fontSizeTit
 //graphique type courbe
 function drawLineChart(chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTitle, boldTitleLegend, italicTitleLegend, fontSizeTitleLegend, colorTitleLegend, fontNameChart, backgroundColorChart) {
 	var data_for_googleChart = insertData();
-	
+
 	// here the option of our representation
 	var options_line = {
 			title : chartTitle,
@@ -718,7 +716,7 @@ function drawLineChart(chartTitle, boldTitle, italicTitle, fontSizeTitle, colorT
 	chart_line.draw(data_for_googleChart, options_line);
 }
 
-// function to insert data in charts
+//function to insert data in charts
 function insertData() {
 	var tables = new google.visualization.DataTable();
 	switch (graph_compte_mesure) {
@@ -752,10 +750,10 @@ function insertData() {
 	default:
 		//here we insert the data from our two mesures
 		tables.addColumn('string', 'X');
-		tables.addColumn('number', 'Y');
-		for (var i = 0; i < graph_absciss.length; i++) {
-			tables.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
-		}
+	tables.addColumn('number', 'Y');
+	for (var i = 0; i < graph_absciss.length; i++) {
+		tables.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
+	}
 	}
 	return tables;
 }
