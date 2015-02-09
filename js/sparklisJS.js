@@ -233,10 +233,8 @@ function addChart() {
 		alert('Not available yet ! '); 
 	});
 
-
-
-
-	$('li').click(function() {
+/*
+	$('.chart').click(function() {
 		if ($(this).hasClass('active')){
 			$(this).removeClass('active');
 		}
@@ -244,7 +242,7 @@ function addChart() {
 			$(this).addClass('active');
 		}
 	});
-
+*/
 }
 
 
