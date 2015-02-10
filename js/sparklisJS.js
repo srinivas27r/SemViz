@@ -774,41 +774,51 @@ function drawLineChart() {
 //function to insert data in charts
 function insertData() {
 	var tables = new google.visualization.DataTable();
-	switch (graph_compte_mesure) {
-	case 1:
-		//here we insert the data from our one mesure
-		tables.addColumn('string', axe_absciss_name);
-		tables.addColumn('number', axe_ordonate_name[0]);
-		for (var i = 0; i < graph_absciss.length; i++) {
-			tables.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
-		}
-		break;
-	case 2:
-		//here we insert the data from our two mesures
-		tables.addColumn('string', axe_absciss_name);
-		tables.addColumn('number', axe_ordonate_name[0]);
-		tables.addColumn('number', axe_ordonate_name[1]);
-		for (var i = 0; i < graph_absciss.length; i++) {
-			tables.addRows([ [ graph_absciss[i], graph_ordonate[i], graph_ordonate_second[i] ] ])
-		}
-		break;
-	case 3:
-		//here we insert the data from our three mesures
-		tables.addColumn('string', axe_absciss_name);
-		tables.addColumn('number', axe_ordonate_name[0]);
-		tables.addColumn('number', axe_ordonate_name[1]);
-		tables.addColumn('number', axe_ordonate_name[2]);
-		for (var i = 0; i < graph_absciss.length; i++) {
-			tables.addRows([ [ graph_absciss[i], graph_ordonate[i], graph_ordonate_second [i], graph_ordonate_third [i] ] ])
-		}
-		break;
-	default:
+	if (document.getElementById("aggregator").value == 'Compte') {
 		//here we insert the data from our two mesures
 		tables.addColumn('string', axe_absciss_name);
 		tables.addColumn('number', 'number of occurences');
-	for (var i = 0; i < graph_absciss.length; i++) {
-		tables.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
+		for (var i = 0; i < graph_absciss.length; i++) {
+			tables.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
+		}
 	}
+	else {
+		switch (graph_compte_mesure) {
+		case 1:
+			//here we insert the data from our one mesure
+			tables.addColumn('string', axe_absciss_name);
+			tables.addColumn('number', axe_ordonate_name[0]);
+			for (var i = 0; i < graph_absciss.length; i++) {
+				tables.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
+			}
+			break;
+		case 2:
+			//here we insert the data from our two mesures
+			tables.addColumn('string', axe_absciss_name);
+			tables.addColumn('number', axe_ordonate_name[0]);
+			tables.addColumn('number', axe_ordonate_name[1]);
+			for (var i = 0; i < graph_absciss.length; i++) {
+				tables.addRows([ [ graph_absciss[i], graph_ordonate[i], graph_ordonate_second[i] ] ])
+			}
+			break;
+		case 3:
+			//here we insert the data from our three mesures
+			tables.addColumn('string', axe_absciss_name);
+			tables.addColumn('number', axe_ordonate_name[0]);
+			tables.addColumn('number', axe_ordonate_name[1]);
+			tables.addColumn('number', axe_ordonate_name[2]);
+			for (var i = 0; i < graph_absciss.length; i++) {
+				tables.addRows([ [ graph_absciss[i], graph_ordonate[i], graph_ordonate_second [i], graph_ordonate_third [i] ] ])
+			}
+			break;
+		default:
+			//here we insert the data from no mesures
+			tables.addColumn('string', axe_absciss_name);
+			tables.addColumn('number', 'number of occurences');
+			for (var i = 0; i < graph_absciss.length; i++) {
+				tables.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
+			}
+		}
 	}
 	return tables;
 }
