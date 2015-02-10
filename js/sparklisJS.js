@@ -20,6 +20,7 @@ var graph_absciss = [];
 var graph_ordonate = [];
 var graph_ordonate_second = [];
 var graph_ordonate_third = [];
+var finalTab = [];
 
 //MO reacts to changes in a DOM. It detects when 'extension' appears.
 var observer = new MutationObserver(function(mutations) {
@@ -30,6 +31,7 @@ var observer = new MutationObserver(function(mutations) {
 			if (mutation.addedNodes[i].id == 'extension') { 
 
 				lookOverDom();
+				updatebyNumberResults();
 			}
 
 			if ($("#results").is(":hidden") ){
@@ -62,15 +64,17 @@ function lookOverDom(){
 	var checkbox = "checkbox";
 
 
+	var tableToJSON = [];
+	var headerTable = [];
+	finalTab = [];
 
 	//Get tableToJSON without the first colunm useless
-	var tableToJSON = $('table#extension').tableToJSON({ ignoreColumns: [0] });
+	tableToJSON = $('table#extension').tableToJSON({ ignoreColumns: [0] });
 
 	//Get header of tableToJSON
 	var keysTable = tableToJSON.first();
-	var headerTable = Object.extended(keysTable).keys();
+	headerTable = Object.extended(keysTable).keys();
 	var value;
-	var finalTab = [];
 
 	$("#control-charts").show();
 
@@ -140,7 +144,7 @@ function lookOverDom(){
   	}
 
 	//Dimension selected  
-	$('input:radio[name=dimensionRadioButton]').click(function() {
+	$('input:radio[name=dimensionRadioButton]').bind('change', function() {
 		absciss = [];
 		value = $(this).val();
 		var abscissIndex = headerTable.findIndex(value);
@@ -239,7 +243,21 @@ function addInput(lcontainer, name, value, text, type) {
 	$('<label />', { 'for': name, text: value, id:nameSpace+"1" }).appendTo(container);
 }
 
+function updatebyNumberResults(){
+	var tableToJSON = $('table#extension').tableToJSON({ ignoreColumns: [0] });
+	var keysTable = tableToJSON.first();
+	var headerTable = Object.extended(keysTable).keys();
 
+	if($('input:radio[name=dimensionRadioButton]:checked')){
+		absciss = [];
+
+		value = $('input:radio[name=dimensionRadioButton]:checked').val();
+		var abscissIndex = headerTable.findIndex(value);
+		finalTab = generateData(tableToJSON);
+
+		absciss = finalTab[abscissIndex];
+	}
+}
 
 function addChart() {	
 	var aera = document.getElementById("charts");
