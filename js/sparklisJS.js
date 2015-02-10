@@ -22,6 +22,8 @@ var graph_ordonate = [];
 var graph_ordonate_second = [];
 var graph_ordonate_third = [];
 var finalTab = [];
+var axe_ordonate_name =[];
+var axe_absciss_name ="";
 
 //MO reacts to changes in a DOM. It detects when 'extension' appears.
 var observer = new MutationObserver(function(mutations) {
@@ -174,15 +176,21 @@ function lookOverDom(){
 		switch (alsoInterested.length) {
 		case 1:
 			generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
+			axe_ordonate_name.add(alsoInterested[0]);
 			break;
 		case 2:
 			generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
 			generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
+			axe_ordonate_name.add(alsoInterested[0]);
+			axe_ordonate_name.add(alsoInterested[1]);
 			break;
 		case 3:
 			generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
 			generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
 			generateOrdonate(ordonate_third, alsoInterested[2], tableToJSON, headerTable);
+			axe_ordonate_name.add(alsoInterested[0]);
+			axe_ordonate_name.add(alsoInterested[1]);
+			axe_ordonate_name.add(alsoInterested[2]);
 			break;
 		default:
 			break;
@@ -258,6 +266,7 @@ function updatebyNumberResults(){
 		finalTab = generateData(tableToJSON);
 
 		absciss = finalTab[abscissIndex];
+		axe_absciss_name = finalTab[abscissIndex];
 	}
 }
 
@@ -768,35 +777,35 @@ function insertData() {
 	switch (graph_compte_mesure) {
 	case 1:
 		//here we insert the data from our one mesure
-		tables.addColumn('string', 'X');
-		tables.addColumn('number', 'Y');
+		tables.addColumn('string', axe_absciss_name);
+		tables.addColumn('number', axe_ordonate_name[0]);
 		for (var i = 0; i < graph_absciss.length; i++) {
 			tables.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
 		}
 		break;
 	case 2:
 		//here we insert the data from our two mesures
-		tables.addColumn('string', 'X');
-		tables.addColumn('number', 'Y');
-		tables.addColumn('number', 'Z');
+		tables.addColumn('string', axe_absciss_name);
+		tables.addColumn('number', axe_ordonate_name[0]);
+		tables.addColumn('number', axe_ordonate_name[1]);
 		for (var i = 0; i < graph_absciss.length; i++) {
 			tables.addRows([ [ graph_absciss[i], graph_ordonate[i], graph_ordonate_second[i] ] ])
 		}
 		break;
 	case 3:
 		//here we insert the data from our three mesures
-		tables.addColumn('string', 'X');
-		tables.addColumn('number', 'Y');
-		tables.addColumn('number', 'Z');
-		tables.addColumn('number', 'T');
+		tables.addColumn('string', axe_absciss_name);
+		tables.addColumn('number', axe_ordonate_name[0]);
+		tables.addColumn('number', axe_ordonate_name[1]);
+		tables.addColumn('number', axe_ordonate_name[2]);
 		for (var i = 0; i < graph_absciss.length; i++) {
 			tables.addRows([ [ graph_absciss[i], graph_ordonate[i], graph_ordonate_second [i], graph_ordonate_third [i] ] ])
 		}
 		break;
 	default:
 		//here we insert the data from our two mesures
-		tables.addColumn('string', 'X');
-	tables.addColumn('number', 'Y');
+		tables.addColumn('string', axe_absciss_name);
+		tables.addColumn('number', 'number of occurences');
 	for (var i = 0; i < graph_absciss.length; i++) {
 		tables.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
 	}
