@@ -14,6 +14,7 @@ var ordonate = [];
 var ordonate_second = [];
 var ordonate_third = []
 var graphe_title = [];
+var currentChart = "";
 
 var graph_compte_mesure = 0;
 var graph_absciss = [];
@@ -29,9 +30,9 @@ var observer = new MutationObserver(function(mutations) {
 		for (var i = 0; i < mutation.addedNodes.length; i++){
 
 			if (mutation.addedNodes[i].id == 'extension') { 
-
 				lookOverDom();
 				updatebyNumberResults();
+				reloadChart();
 			}
 
 			if ($("#results").is(":hidden") ){
@@ -151,7 +152,7 @@ function lookOverDom(){
 		finalTab = generateData(tableToJSON);
 
 		absciss = finalTab[abscissIndex];
-
+		reloadChart();
 	});
 
 	//When an user selects interest in an addtional measure, add this to alsoInterested
@@ -186,6 +187,7 @@ function lookOverDom(){
 		default:
 			break;
 		}
+		reloadChart();
 	});
 }
 /*
@@ -240,7 +242,7 @@ function addInput(lcontainer, name, value, text, type) {
 	nameSpace = nameSpace.underscore();
 
 	$('<input />', { type: type, name: name, value: value, id:nameSpace }).appendTo(container);
-	$('<label />', { 'for': name, text: value, id:nameSpace+"1" }).appendTo(container);
+	$('<label />', { 'for': nameSpace, text: value, id:nameSpace+"1" }).appendTo(container);
 }
 
 function updatebyNumberResults(){
@@ -478,7 +480,8 @@ function aggreg_aucun() {
 	}
 }
 
-function submit(bout, chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTitle, boldTitleLegend, italicTitleLegend, fontSizeTitleLegend, colorTitleLegend, fontNameChart, backgroundColorChart) {
+function submit(bout) {
+	currentChart = bout;
 	var xhr;
 	try { // Essayer IE
 		xhr = new ActiveXObject('Msxml2.XMLHTTP');
@@ -550,7 +553,7 @@ function submit(bout, chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTi
 	// choix du type de graphique
 	switch (bout) {
 	case 'line':
-		google.setOnLoadCallback(drawLineChart(chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTitle, boldTitleLegend, italicTitleLegend, fontSizeTitleLegend, colorTitleLegend, fontNameChart, backgroundColorChart));
+		google.setOnLoadCallback(drawLineChart());
 		break;
 	case 'pie':
 		google.setOnLoadCallback(drawPieChart());
@@ -559,10 +562,10 @@ function submit(bout, chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTi
 		google.setOnLoadCallback(drawMapChart());
 		break;
 	case 'histo_vertical':
-		google.setOnLoadCallback(drawBarChart_vertical(chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTitle, boldTitleLegend, italicTitleLegend, fontSizeTitleLegend, colorTitleLegend, fontNameChart, backgroundColorChart));
+		google.setOnLoadCallback(drawBarChart_vertical());
 		break;
 	case 'histo_horizontal':
-		google.setOnLoadCallback(drawBarChart_horizontal(chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTitle, boldTitleLegend, italicTitleLegend, fontSizeTitleLegend, colorTitleLegend, fontNameChart, backgroundColorChart));
+		google.setOnLoadCallback(drawBarChart_horizontal());
 		break;
 	case 'point':
 		google.setOnLoadCallback(drawPointChart());
@@ -644,31 +647,31 @@ function drawPieChart() {
 }
 
 //graphique type histogramme vertical
-function drawBarChart_vertical(chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTitle, boldTitleLegend, italicTitleLegend, fontSizeTitleLegend, colorTitleLegend, fontNameChart, backgroundColorChart) {
+function drawBarChart_vertical() {
 	var data_for_googleChart = insertData();
 
 	// here the option of our representation
 	var options_bar = {
-			title : chartTitle,
+			title : $('#chartTitle').val(),
 			titleTextStyle : {
-				color: colorTitle,
-				fontName: fontNameChart,
-				fontSize: fontSizeTitle,
-				bold: boldTitle,
-				italic: italicTitle
+				color: $('#colorTitle').val(),
+				fontName: $('#fontName').val(),
+				fontSize: $('#fontSizeTitle').val(),
+				bold: $('#boldTitle').is(':checked'),
+				italic: $('#italicTitle').is(':checked')
 			},
 			legend: {
 				textStyle : {
-					color: colorTitleLegend,
-					fontName: fontNameChart,
-					fontSize: fontSizeTitleLegend,
-					bold: boldTitleLegend,
-					italic: italicTitleLegend
+					color: $('#colorTitleLegend').val(),
+					fontName: $('#fontName').val(),
+					fontSize: $('#fontSizeTitleLegend').val(),
+					bold: $('#boldTitleLegend').is(':checked'),
+					italic: $('#italicTitleLegend').is(':checked')
 				}
 			},
 			width : 1000,
 			height : 563,
-			backgroundColor: backgroundColorChart,
+			backgroundColor: $('#backgroundColorChart').val(),
 			hAxis : {
 				title : graphe_title[0]
 			},
@@ -683,30 +686,30 @@ function drawBarChart_vertical(chartTitle, boldTitle, italicTitle, fontSizeTitle
 }
 
 //graphique type histogramme horizontal
-function drawBarChart_horizontal(chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTitle, boldTitleLegend, italicTitleLegend, fontSizeTitleLegend, colorTitleLegend, fontNameChart, backgroundColorChart) {
+function drawBarChart_horizontal() {
 	var data_for_googleChart = insertData();
 
 	var options_bar = {
-			title : chartTitle,
+			title : $('#chartTitle').val(),
 			titleTextStyle : {
-				color: colorTitle,
-				fontName: fontNameChart,
-				fontSize: fontSizeTitle,
-				bold: boldTitle,
-				italic: italicTitle
+				color: $('#colorTitle').val(),
+				fontName: $('#fontName').val(),
+				fontSize: $('#fontSizeTitle').val(),
+				bold: $('#boldTitle').is(':checked'),
+				italic: $('#italicTitle').is(':checked')
 			},
 			legend: {
 				textStyle : {
-					color: colorTitleLegend,
-					fontName: fontNameChart,
-					fontSize: fontSizeTitleLegend,
-					bold: boldTitleLegend,
-					italic: italicTitleLegend
+					color: $('#colorTitleLegend').val(),
+					fontName: $('#fontName').val(),
+					fontSize: $('#fontSizeTitleLegend').val(),
+					bold: $('#boldTitleLegend').is(':checked'),
+					italic: $('#italicTitleLegend').is(':checked')
 				}
 			},
 			width : 1000,
 			height : 563,
-			backgroundColor: backgroundColorChart,
+			backgroundColor: $('#backgroundColorChart').val(),
 			hAxis : {
 				title : graphe_title[0]
 			},
@@ -721,31 +724,31 @@ function drawBarChart_horizontal(chartTitle, boldTitle, italicTitle, fontSizeTit
 }
 
 //graphique type courbe
-function drawLineChart(chartTitle, boldTitle, italicTitle, fontSizeTitle, colorTitle, boldTitleLegend, italicTitleLegend, fontSizeTitleLegend, colorTitleLegend, fontNameChart, backgroundColorChart) {
+function drawLineChart() {
 	var data_for_googleChart = insertData();
 
 	// here the option of our representation
 	var options_line = {
-			title : chartTitle,
+			title : $('#chartTitle').val(),
 			titleTextStyle : {
-				color: colorTitle,
-				fontName: fontNameChart,
-				fontSize: fontSizeTitle,
-				bold: boldTitle,
-				italic: italicTitle
+				color: $('#colorTitle').val(),
+				fontName: $('#fontName').val(),
+				fontSize: $('#fontSizeTitle').val(),
+				bold: $('#boldTitle').is(':checked'),
+				italic: $('#italicTitle').is(':checked')
 			},
 			legend: {
 				textStyle : {
-					color: colorTitleLegend,
-					fontName: fontNameChart,
-					fontSize: fontSizeTitleLegend,
-					bold: boldTitleLegend,
-					italic: italicTitleLegend
+					color: $('#colorTitleLegend').val(),
+					fontName: $('#fontName').val(),
+					fontSize: $('#fontSizeTitleLegend').val(),
+					bold: $('#boldTitleLegend').is(':checked'),
+					italic: $('#italicTitleLegend').is(':checked')
 				}
 			},
 			width : 1000,
 			height : 563,
-			backgroundColor: backgroundColorChart,
+			backgroundColor: $('#backgroundColorChart').val(),
 			hAxis : {
 				title : graphe_title[0]
 			},
@@ -799,4 +802,17 @@ function insertData() {
 	}
 	}
 	return tables;
+}
+$( "#personnaliser" ).bind( "click submit", function() {
+	reloadChart();
+});
+$( "#aggregator" ).bind( "click submit", function() {
+	reloadChart();
+});
+
+function reloadChart() {
+	//Reload chart if a chart type was selected
+	if(currentChart!=""){
+		submit(currentChart);
+	}
 }
