@@ -65,7 +65,9 @@ function lookOverDom(){
 	var measureRadioButton = "measureRadioButton";
 	var radio = "radio";
 	var checkbox = "checkbox";
-
+		ordonate = [];
+		ordonate_second = [];
+		ordonate_third = [];
 
 	var tableToJSON = [];
 	var headerTable = [];
