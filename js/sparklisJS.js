@@ -23,8 +23,8 @@ var graph_ordonate = [];
 var graph_ordonate_second = [];
 var graph_ordonate_third = [];
 var finalTab = [];
-var legend_ordonate = [];
-var legend_absciss = "";
+var axe_ordonate_name =[];
+var axe_absciss_name ="";
 
 //MO reacts to changes in a DOM. It detects when 'extension' appears.
 var observer = new MutationObserver(function(mutations) {
@@ -164,12 +164,10 @@ function lookOverDom(){
 
 	//When an user selects interest in an addtional measure, add this to alsoInterested
 	$('input:checkbox[name=measureRadioButton]').bind('change', function() {
-
 		var alsoInterested = [];
 		ordonate = [];
 		ordonate_second = [];
 		ordonate_third = [];
-
 		$('input:checkbox[name=measureRadioButton]').each(function(index, value) {
 			if (this.checked) {
 				/*get name of measure associated with checkbox*/
@@ -299,7 +297,7 @@ function addChart() {
 	$('.close').click(function() {
 		$(this).closest('li').remove();
 		//Delete too the chartClicked
-		if($('#currentChartClicked')[0].children[1]){
+		if($('#currentChartClicked')){
 			if($(this).closest('li')[0].children[1].id == $('#currentChartClicked')[0].children[1].id) {
 				$('#currentChartClicked')[0].innerHTML = "";
 			}
@@ -308,6 +306,8 @@ function addChart() {
 
 
 	$('.chart').click(function() {
+		$('li').removeClass('selected');
+		$(this).addClass('selected');
 		var aera2 = document.getElementById('chartClicked');
 		aera2.innerHTML = "";
 		var name = $(this)[0].children[1].id;
