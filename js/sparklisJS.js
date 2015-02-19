@@ -295,6 +295,8 @@ function addChart() {
 	var chart = $('<li class="chart" id="chart' + numGraphe + '">').appendTo(aera); 
 	// close button
 	$('<div class="close"><img id="delete-current-focus" height="16" title="Click on this red cross to delete the current focus" alt="Delete" src="icon-delete.png"></div>').appendTo(chart); 
+	$('<div class="modify">Modify</div>').appendTo(chart); 
+	
 	//clone the current graph ino the list div 
 	var current = $('#graphe').clone();
 	current[0].id = current[0].id + numGraphe;
@@ -318,13 +320,9 @@ function addChart() {
 		var aera2 = document.getElementById('chartClicked');
 		aera2.innerHTML = "";
 		var name = $(this)[0].children[1].id;
-		var chart2 = $('<div id="currentChartClicked" name="' + name + '">').appendTo(aera2);
-		//modify button
-		$('<div class="modify">Modify</div>').appendTo(chart2);
+		var chart2 = $('<div id="currentChartClicked" name="' + name + '">').appendTo(aera2);		
 		var current2 = $('#' + name).clone().appendTo(chart2);
-		
 	});
-	//NE FONCTIONNE PAS
 	$('.modify').click(function() {
 		Alert.warning('Not available yet !', 'Chart', {displayDuration: 0});
 	});
