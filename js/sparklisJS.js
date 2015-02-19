@@ -165,45 +165,6 @@ function lookOverDom(){
 
 	//When an user selects interest in an addtional measure, add this to alsoInterested
 	$('input:checkbox[name=measureRadioButton]').bind('change', function() {
-		// var alsoInterested = [];
-		// ordonate = [];
-		// ordonate_second = [];
-		// ordonate_third = [];
-		// $('input:checkbox[name=measureRadioButton]').each(function(index, value) {
-		// 	if (this.checked) {
-		// 		/*get name of measure associated with checkbox*/
-		// 		value = $(this).val();
-		// 		alsoInterested.add(value);
-		// 	}
-		// });
-
-		// finalTab = generateData(tableToJSON);
-
-		// legend_ordonate =[];
-
-		// switch (alsoInterested.length) {
-		// case 1:
-		// 	generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
-
-		// 	legend_ordonate.add(alsoInterested[0]);
-		// 	break;
-		// case 2:
-		// 	generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
-		// 	generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
-
-		// 	legend_ordonate.insert([alsoInterested[0], alsoInterested[1]]);
-		// 	break;
-		// case 3:
-		// 	generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
-		// 	generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
-		// 	generateOrdonate(ordonate_third, alsoInterested[2], tableToJSON, headerTable);
-
-		// 	legend_ordonate = alsoInterested;
-
-		// 	break;
-		// default:
-		// 	break;
-		// }
 		updatebyNumberResultsOrdonate();
 		reloadChart();
 	});
@@ -281,6 +242,7 @@ function updatebyNumberResults(){
 	}
 }
 function updatebyNumberResultsOrdonate(){
+
 	var tableToJSON = $('table#extension').tableToJSON({ ignoreColumns: [0] });
 	var keysTable = tableToJSON.first();
 	var headerTable = Object.extended(keysTable).keys();
@@ -393,6 +355,9 @@ function aggreg_count() {
 	graph_ordonate= [];
 	graph_absciss = [];
 	var increm =0;
+	if(!absciss){
+		Alert.info('Choose at least a metric and  dimension choice is mandatory.', 'Chart modeling');
+	} else {
 	for (var i = 0; i < absciss.length; i++) {
 		if (!in_array(absciss[i],graph_absciss)){
 			graph_ordonate [increm] = 1;
@@ -407,10 +372,7 @@ function aggreg_count() {
 			increm = increm +1;
 		}
 	}
-	if(graph_ordonate.length == 0){
-				Alert.info('Choose at least a metric and  dimension choice is mandatory.', 'Chart modeling', {displayDuration: 0});
-
-	}
+}
 
 }
 
