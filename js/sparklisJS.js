@@ -15,6 +15,7 @@ var ordonate_second = [];
 var ordonate_third = []
 var graphe_title = [];
 var currentChart = "";
+var numGraphe = 0;
 
 var graph_compte_mesure = 0;
 var graph_absciss = [];
@@ -57,7 +58,6 @@ function lookOverDom(){
 	//Initialize dimensions and metrics
 	// $("#dimensions").html("");
 	// $("#metrics").html("");
-		submit(currentChart);
 
 	//Radio Buttons
 	var listDim = $('#dimensions');
@@ -279,36 +279,46 @@ function updatebyNumberResults(){
 	}
 }
 
-function addChart() {	
+function addChart() {
+	numGraphe++;
 	var aera = document.getElementById("charts");
 	//create object to insert as a list object
-	var chart = $('<li class="chart">').appendTo(aera); 
+	var chart = $('<li class="chart" id="chart' + numGraphe + '">').appendTo(aera); 
 	// close button
 	$('<div class="close"><img id="delete-current-focus" height="16" title="Click on this red cross to delete the current focus" alt="Delete" src="icon-delete.png"></div>').appendTo(chart); 
-	//modify button
-	$('<div class="modify">Modify</div>').appendTo(chart);
 	//clone the current graph ino the list div 
-	var current = $('#graphe').clone().appendTo(chart); 
+	var current = $('#graphe').clone();
+	current[0].id = current[0].id + numGraphe;
+	current.appendTo(chart);
+	
 	//add function in order to delete the list object
 	$('.close').click(function() {
 		$(this).closest('li').remove();
+		//Delete too the chartClicked
+		if($('#currentChartClicked')[0].children[1]){
+			if($(this).closest('li')[0].children[1].id == $('#currentChartClicked')[0].children[1].id) {
+				$('#currentChartClicked')[0].innerHTML = "";
+			}
+		}
 	});
 
+
+	$('.chart').click(function() {
+		var aera2 = document.getElementById('chartClicked');
+		aera2.innerHTML = "";
+		var name = $(this)[0].children[1].id;
+		var chart2 = $('<div id="currentChartClicked" name="' + name + '">').appendTo(aera2);
+		//modify button
+		$('<div class="modify">Modify</div>').appendTo(chart2);
+		var current2 = $('#' + name).clone().appendTo(chart2);
+		
+	});
+	//NE FONCTIONNE PAS
 	$('.modify').click(function() {
 		Alert.warning('Not available yet !', 'Chart', {displayDuration: 0});
 	});
-
-/*
-	$('.chart').click(function() {
-		if ($(this).hasClass('active')){
-			$(this).removeClass('active');
-		}
-		else {
-			$(this).addClass('active');
-		}
-	});
-*/
 }
+
 
 
 google.load('visualization', '1', {

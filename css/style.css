@@ -1,5 +1,5 @@
 /*position fixe bouton inserer 
-height du graphe pour ne pas décaler toute la page*/
+height du graphe pour ne pas dÃ©caler toute la page*/
 .toggle {
 	display: inline-block;
 }
@@ -24,7 +24,7 @@ table #settings {
 	font: bold 11px Batang, arial, serif;
 	list-style-type: none;
 	padding-bottom: 24px;
-	/* à modifier suivant la taille de la police ET de la hauteur de l'onglet dans #onglets li */
+	/* Ã  modifier suivant la taille de la police ET de la hauteur de l'onglet dans #onglets li */
 	border-bottom: 1px solid #9EA0A1;
 	margin-left: 0;
 }
@@ -32,7 +32,7 @@ table #settings {
 #onglets li {
 	float: left;
 	height: 21px;
-	/* à modifier suivant la taille de la police pour centrer le texte dans l'onglet */
+	/* Ã  modifier suivant la taille de la police pour centrer le texte dans l'onglet */
 	background-color: #F4F9FD;
 	margin: 2px 2px 0 2px !important;
 	/* Pour les navigateurs autre que IE */
@@ -117,34 +117,22 @@ table #settings {
 	padding: 2px;
 }
 
+#chartClicked {
+	text-align: center;
+	display: inline-block;
+}
+
 #charts {
-	margin-left: 10px;
-	margin-top: 10px;
-	list-style-type: none;
-	width: 100%;
+	white-space:nowrap;
+	overflow-y: hidden;
+	overflow-x: auto;
 }
 
 .chart {
-	margin-top: 10px;
-	background-color: #efefef;
-	padding: 10px;
-	width: 1000px;
-	float: left;
-	display: block;
-	zoom: 0.5;
-	-ms-zoom: 0.5;
-	-webkit-zoom: 0.5;
-	-moz-transform: scale(0.5, 0.5);
-	-moz-transform-origin: left center;
-}
-
-.chart:hover {
-	zoom: 1;
-	-ms-zoom: 1;
-	-webkit-zoom: 1;
-	-moz-transform: scale(1, 1);
-	-moz-transform-origin: left center;
-
+	height: 588px;
+	display: inline-block;
+	border: 1px solid #000;
+	zoom: 0.25;
 }
 
 .active{
@@ -156,9 +144,12 @@ table #settings {
 
 }
 
-
 .modify {
+	text-align: left;
 	margin-left: 75px;
 	margin-top: -20px;
-	position: absolute;
+}
+
+.close {
+	text-align: left;
 }
