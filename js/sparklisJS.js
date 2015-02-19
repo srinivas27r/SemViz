@@ -41,6 +41,7 @@ var observer = new MutationObserver(function(mutations) {
 			if ($("#results").is(":hidden") ){
 				$("#control-charts").hide();
 			}
+
 		}
 	});
 });
@@ -206,7 +207,10 @@ function lookOverDom(){
 		}
 		reloadChart();
 	});
+	submit('line').once();
+
 }
+
 /*
  * Running of Mutli Measures : 
  * array ordonate : 3 max
@@ -358,6 +362,11 @@ function aggreg_count() {
 			increm = increm +1;
 		}
 	}
+	if(graph_ordonate.length == 0){
+				Alert.info('Choose at least a metric and  dimension choice is mandatory.', 'Chart modeling', {displayDuration: 0});
+
+	}
+
 }
 
 //function aggregator sum, if there are two (or more) same item in the array, it add their measure
@@ -601,52 +610,6 @@ function submit(btn) {
 	graph_compte_mesure = 0;
 }
 
-/*
-function drawPointChart() {
-	var data_point = new google.visualization.DataTable();
-	data_point.addColumn('string', 'X');
-	data_point.addColumn('number', 'People');
-
-	//here we insert the data from our two table
-	for (var i = 0; i < graph_absciss.length; i++) {
-		data_point.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
-	}
-	// here the option of our representation
-	var options_point = {
-			title : 'ici un titre',
-			width : 1000,
-			height : 563,
-
-	};
-
-	var chart_point = new google.visualization.ScatterChart(document
-			.getElementById('graphe'));
-	chart_point.draw(data_point, options_point);
-}
-
-function drawMapChart() {
-	var data_graph = new google.visualization.DataTable();
-	data_graph.addColumn('string', 'X');
-	data_graph.addColumn('number', 'People');
-
-	//here we insert the data from our two table
-	for (var i = 0; i < graph_absciss.length; i++) {
-		data_graph.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
-	}
-	// here the option of our representation
-	var options_graph = {
-			title : 'ici un titre',
-			width : 1000,
-			height : 563,
-
-	};
-
-	var chart_graph = new google.visualization.GeoChart(document
-			.getElementById('graphe'));
-	chart_graph.draw(data_graph, options_graph);
-
-}
- */
 //graphique type camanbert
 function drawPieChart() {
 	var data_pie = new google.visualization.DataTable();
@@ -668,7 +631,6 @@ function drawPieChart() {
 	var chart_pie = new google.visualization.PieChart(document
 			.getElementById('graphe'));
 	chart_pie.draw(data_pie, options);
-
 }
 
 //graphique type histogramme vertical
