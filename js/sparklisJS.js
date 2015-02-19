@@ -23,8 +23,8 @@ var graph_ordonate = [];
 var graph_ordonate_second = [];
 var graph_ordonate_third = [];
 var finalTab = [];
-var axe_ordonate_name =[];
-var axe_absciss_name ="";
+var legend_absciss =[];
+var lengend_ordonate ="";
 
 //MO reacts to changes in a DOM. It detects when 'extension' appears.
 var observer = new MutationObserver(function(mutations) {
@@ -35,6 +35,7 @@ var observer = new MutationObserver(function(mutations) {
 			if (mutation.addedNodes[i].id == 'extension') { 
 				lookOverDom();
 				updatebyNumberResults();
+				updatebyNumberResultsOrdonate();
 				reloadChart();
 			}
 
@@ -164,49 +165,48 @@ function lookOverDom(){
 
 	//When an user selects interest in an addtional measure, add this to alsoInterested
 	$('input:checkbox[name=measureRadioButton]').bind('change', function() {
-		var alsoInterested = [];
-		ordonate = [];
-		ordonate_second = [];
-		ordonate_third = [];
-		$('input:checkbox[name=measureRadioButton]').each(function(index, value) {
-			if (this.checked) {
-				/*get name of measure associated with checkbox*/
-				value = $(this).val();
-				alsoInterested.add(value);
-			}
-		});
+		// var alsoInterested = [];
+		// ordonate = [];
+		// ordonate_second = [];
+		// ordonate_third = [];
+		// $('input:checkbox[name=measureRadioButton]').each(function(index, value) {
+		// 	if (this.checked) {
+		// 		/*get name of measure associated with checkbox*/
+		// 		value = $(this).val();
+		// 		alsoInterested.add(value);
+		// 	}
+		// });
 
-		finalTab = generateData(tableToJSON);
+		// finalTab = generateData(tableToJSON);
 
-		legend_ordonate =[];
+		// legend_ordonate =[];
 
-		switch (alsoInterested.length) {
-		case 1:
-			generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
+		// switch (alsoInterested.length) {
+		// case 1:
+		// 	generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
 
-			legend_ordonate.add(alsoInterested[0]);
-			break;
-		case 2:
-			generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
-			generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
+		// 	legend_ordonate.add(alsoInterested[0]);
+		// 	break;
+		// case 2:
+		// 	generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
+		// 	generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
 
-			legend_ordonate.insert([alsoInterested[0], alsoInterested[1]]);
-			break;
-		case 3:
-			generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
-			generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
-			generateOrdonate(ordonate_third, alsoInterested[2], tableToJSON, headerTable);
+		// 	legend_ordonate.insert([alsoInterested[0], alsoInterested[1]]);
+		// 	break;
+		// case 3:
+		// 	generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
+		// 	generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
+		// 	generateOrdonate(ordonate_third, alsoInterested[2], tableToJSON, headerTable);
 
-			legend_ordonate = alsoInterested;
+		// 	legend_ordonate = alsoInterested;
 
-			break;
-		default:
-			break;
-		}
+		// 	break;
+		// default:
+		// 	break;
+		// }
+		updatebyNumberResultsOrdonate();
 		reloadChart();
 	});
-	submit('line').once();
-
 }
 
 /*
@@ -277,7 +277,52 @@ function updatebyNumberResults(){
 		finalTab = generateData(tableToJSON);
 
 		absciss = finalTab[abscissIndex];
-		legend_absciss = finalTab[abscissIndex];
+		legend_absciss = finalTab[abscissIndex];	
+	}
+}
+function updatebyNumberResultsOrdonate(){
+	var tableToJSON = $('table#extension').tableToJSON({ ignoreColumns: [0] });
+	var keysTable = tableToJSON.first();
+	var headerTable = Object.extended(keysTable).keys();
+
+	var alsoInterested = [];
+	ordonate = [];
+	ordonate_second = [];
+	ordonate_third = [];
+	$('input:checkbox[name=measureRadioButton]').each(function(index, value) {
+		if (this.checked) {
+			/*get name of measure associated with checkbox*/
+			value = $(this).val();
+			alsoInterested.add(value);
+		}
+	});
+
+	finalTab = generateData(tableToJSON);
+
+	legend_ordonate =[];
+
+	switch (alsoInterested.length) {
+	case 1:
+		generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
+
+		legend_ordonate.add(alsoInterested[0]);
+		break;
+	case 2:
+		generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
+		generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
+
+		legend_ordonate.insert([alsoInterested[0], alsoInterested[1]]);
+		break;
+	case 3:
+		generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
+		generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
+		generateOrdonate(ordonate_third, alsoInterested[2], tableToJSON, headerTable);
+
+		legend_ordonate = alsoInterested;
+
+		break;
+	default:
+		break;
 	}
 }
 
