@@ -22,8 +22,8 @@ var graph_ordonate = [];
 var graph_ordonate_second = [];
 var graph_ordonate_third = [];
 var finalTab = [];
-var legend_ordonate =[];
-var axe_absciss_name = "";
+var legend_ordonate = [];
+var legend_absciss = "";
 
 //MO reacts to changes in a DOM. It detects when 'extension' appears.
 var observer = new MutationObserver(function(mutations) {
@@ -57,6 +57,7 @@ function lookOverDom(){
 	//Initialize dimensions and metrics
 	// $("#dimensions").html("");
 	// $("#metrics").html("");
+		submit(currentChart);
 
 	//Radio Buttons
 	var listDim = $('#dimensions');
@@ -65,9 +66,10 @@ function lookOverDom(){
 	var measureRadioButton = "measureRadioButton";
 	var radio = "radio";
 	var checkbox = "checkbox";
-		ordonate = [];
-		ordonate_second = [];
-		ordonate_third = [];
+
+	ordonate = [];
+	ordonate_second = [];
+	ordonate_third = [];
 
 	var tableToJSON = [];
 	var headerTable = [];
@@ -161,10 +163,12 @@ function lookOverDom(){
 
 	//When an user selects interest in an addtional measure, add this to alsoInterested
 	$('input:checkbox[name=measureRadioButton]').bind('change', function() {
+
 		var alsoInterested = [];
 		ordonate = [];
 		ordonate_second = [];
 		ordonate_third = [];
+
 		$('input:checkbox[name=measureRadioButton]').each(function(index, value) {
 			if (this.checked) {
 				/*get name of measure associated with checkbox*/
@@ -180,21 +184,22 @@ function lookOverDom(){
 		switch (alsoInterested.length) {
 		case 1:
 			generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
+
 			legend_ordonate.add(alsoInterested[0]);
 			break;
 		case 2:
 			generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
 			generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
-			legend_ordonate.add(alsoInterested[0]);
-			legend_ordonate.add(alsoInterested[1]);
+
+			legend_ordonate.add(alsoInterested[0],alsoInterested[1]);
 			break;
 		case 3:
 			generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
 			generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
 			generateOrdonate(ordonate_third, alsoInterested[2], tableToJSON, headerTable);
-			legend_ordonate.add(alsoInterested[0]);
-			legend_ordonate.add(alsoInterested[1]);
-			legend_ordonate.add(alsoInterested[2]);
+
+			legend_ordonate = alsoInterested;
+
 			break;
 		default:
 			break;
@@ -270,7 +275,7 @@ function updatebyNumberResults(){
 		finalTab = generateData(tableToJSON);
 
 		absciss = finalTab[abscissIndex];
-		axe_absciss_name = finalTab[abscissIndex];
+		legend_absciss = finalTab[abscissIndex];
 	}
 }
 
@@ -304,8 +309,6 @@ function addChart() {
 	});
 */
 }
-
-
 
 
 google.load('visualization', '1', {
@@ -493,8 +496,8 @@ function aggreg_aucun() {
 	}
 }
 
-function submit(bout) {
-	currentChart = bout;
+function submit(btn) {
+	currentChart = btn;
 	var xhr;
 	try { // Essayer IE
 		xhr = new ActiveXObject('Msxml2.XMLHTTP');
@@ -564,7 +567,7 @@ function submit(bout) {
 	alert('TEST =' + document.getElementById("aggregator").value);
 	}
 	// choix du type de graphique
-	switch (bout) {
+	switch (btn) {
 	case 'line':
 		google.setOnLoadCallback(drawLineChart());
 		break;
@@ -584,6 +587,7 @@ function submit(bout) {
 		google.setOnLoadCallback(drawPointChart());
 		break;
 	default:
+	//Alert.error('Review Settings', 'Chart', {displayDuration: 0});
 		alert('revoir les parametres');
 	}
 	graph_compte_mesure = 0;
@@ -780,7 +784,7 @@ function insertData() {
 	var tables = new google.visualization.DataTable();
 	if (document.getElementById("aggregator").value == 'Compte') {
 		//here we insert the data from our two mesures
-		tables.addColumn('string', axe_absciss_name);
+		tables.addColumn('string', legend_absciss);
 		tables.addColumn('number', 'number of occurences');
 		for (var i = 0; i < graph_absciss.length; i++) {
 			tables.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
@@ -790,7 +794,7 @@ function insertData() {
 		switch (graph_compte_mesure) {
 		case 1:
 			//here we insert the data from our one mesure
-			tables.addColumn('string', axe_absciss_name);
+			tables.addColumn('string', legend_absciss);
 			tables.addColumn('number', legend_ordonate[0]);
 			for (var i = 0; i < graph_absciss.length; i++) {
 				tables.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
@@ -798,7 +802,7 @@ function insertData() {
 			break;
 		case 2:
 			//here we insert the data from our two mesures
-			tables.addColumn('string', axe_absciss_name);
+			tables.addColumn('string', legend_absciss);
 			tables.addColumn('number', legend_ordonate[0]);
 			tables.addColumn('number', legend_ordonate[1]);
 			for (var i = 0; i < graph_absciss.length; i++) {
@@ -807,7 +811,7 @@ function insertData() {
 			break;
 		case 3:
 			//here we insert the data from our three mesures
-			tables.addColumn('string', axe_absciss_name);
+			tables.addColumn('string', legend_absciss);
 			tables.addColumn('number', legend_ordonate[0]);
 			tables.addColumn('number', legend_ordonate[1]);
 			tables.addColumn('number', legend_ordonate[2]);
@@ -817,7 +821,7 @@ function insertData() {
 			break;
 		default:
 			//here we insert the data from no mesures
-			tables.addColumn('string', axe_absciss_name);
+			tables.addColumn('string', legend_absciss);
 			tables.addColumn('number', 'number of occurences');
 			for (var i = 0; i < graph_absciss.length; i++) {
 				tables.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
