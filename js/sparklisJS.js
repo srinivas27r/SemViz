@@ -191,7 +191,7 @@ function lookOverDom(){
 			generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
 			generateOrdonate(ordonate_second, alsoInterested[1], tableToJSON, headerTable);
 
-			legend_ordonate.add(alsoInterested[0],alsoInterested[1]);
+			legend_ordonate.insert([alsoInterested[0], alsoInterested[1]]);
 			break;
 		case 3:
 			generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
