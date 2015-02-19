@@ -62,7 +62,7 @@ table #settings {
 }
 
 .selected {
-	background-color: #1560BD;
+	background-color: #c8a0c8;
 }
 
 #graphs label {
@@ -131,8 +131,16 @@ table #settings {
 .chart {
 	height: 588px;
 	display: inline-block;
-	border: 1px solid #000;
+	border: 1px solid #c8a0c8;
 	zoom: 0.25;
+	border-radius: 17px;
+	margin-right: 5px;
+	margin-left: 5px;
+	margin-bottom: 15px;
+}
+
+.chart:hover {
+    background-color: #c8a0c8;
 }
 
 .active{
