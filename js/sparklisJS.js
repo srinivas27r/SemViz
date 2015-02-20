@@ -26,6 +26,12 @@ var finalTab = [];
 var legend_absciss =[];
 var lengend_ordonate ="";
 
+
+var tlongitude = [];
+var tlatitude = [];
+var tgeographicName = [];
+var longitude, latitude, geographicName;
+
 //MO reacts to changes in a DOM. It detects when 'extension' appears.
 var observer = new MutationObserver(function(mutations) {
 	mutations.forEach(function(mutation) {
@@ -38,7 +44,6 @@ var observer = new MutationObserver(function(mutations) {
 				updatebyNumberResultsOrdonate();
 				reloadChart();
 			}
-
 			if ($("#results").is(":hidden") ){
 				$("#control-charts").hide();
 			}
@@ -55,23 +60,10 @@ observer.observe(document, {
 });
 
 
+
 function lookOverDom(){
 
-	//Initialize dimensions and metrics
-	// $("#dimensions").html("");
-	// $("#metrics").html("");
-
-	//Radio Buttons
-	var listDim = $('#dimensions');
-	var listM = $('#metrics');
-	var dimensionRadioButton = "dimensionRadioButton";
-	var measureRadioButton = "measureRadioButton";
-	var radio = "radio";
-	var checkbox = "checkbox";
-
-	ordonate = [];
-	ordonate_second = [];
-	ordonate_third = [];
+	ordonate, ordonate_second, ordonate_third, finalTab = [];
 
 	var tableToJSON = [];
 	var headerTable = [];
@@ -85,7 +77,91 @@ function lookOverDom(){
 	headerTable = Object.extended(keysTable).keys();
 	var value;
 
-	$("#control-charts").show();
+	detectDimMetric(headerTable, tableToJSON);
+
+	//Dimension selected  
+	$('input:radio[name=dimensionRadioButton]').bind('change', function() {
+		absciss = [];
+		value = $(this).val();
+		var abscissIndex = headerTable.findIndex(value);
+		finalTab = generateData(tableToJSON);
+
+		absciss = finalTab[abscissIndex];
+		reloadChart();
+	});
+
+	//When an user selects interest in an addtional measure, add this to alsoInterested
+	$('input:checkbox[name=measureRadioButton]').bind('change', function() {
+		updatebyNumberResultsOrdonate();
+		reloadChart();
+	});
+
+	visualizationMap(headerTable);
+}
+
+
+function visualizationMap(headerTable){
+
+	tlongitude, tlatitude, tgeographicName = [];
+	var tableToJSON = $('table#extension').tableToJSON({ ignoreColumns: [0]});
+
+
+	longitude = headerTable.find(/long/);
+	latitude = headerTable.find(/lat/);
+	geographicName = headerTable.find(/place|country|town|city/);
+
+	if(longitude && latitude && geographicName){
+
+		lala(longitude, tlongitude);
+		lala(latitude, tlatitude);
+		lala(geographicName, tgeographicName);
+		
+	}	
+
+	function lala(name, tab){
+		var value = headerTable.findIndex(name);
+		finalTab = generateData(tableToJSON);
+		tab = finalTab[value];
+	}
+}
+
+// Delete useless inputs
+ function updateInput(headerTable) {         
+     var allVals = [];
+     $("input[name=dimensionRadioButton]:radio").each(function() {
+		allVals.push($(this).val());
+	});
+	$("input[name=measureRadioButton]:checkbox").each(function() {
+		allVals.push($(this).val());
+	});
+
+	for(var i= 0; i < allVals.length; i++)
+	{
+ 		if(headerTable.findIndex(allVals[i]) < 0){
+ 			var nameSpace = allVals[i].remove("'")
+			nameSpace = nameSpace.underscore();;
+
+ 			$('#'+nameSpace).remove();
+ 			$('#'+nameSpace+"1").remove();
+
+ 		}
+	}
+}
+
+/*
+ * Analyzing data to identify those dimensions of those metrics
+ * array tableToJSON : results of table named "extension"
+ * array headerTable : headers of tableToJSON
+ */
+function detectDimMetric(headerTable, tableToJSON){
+
+	//Radio Buttons
+	var listDim = $('#dimensions');
+	var listM = $('#metrics');
+	var dimensionRadioButton = "dimensionRadioButton";
+	var measureRadioButton = "measureRadioButton";
+	var radio = "radio";
+	var checkbox = "checkbox";
 
 	// Create Radio Button : Dimension and Measure
 	headerTable.forEach(function(a) {
@@ -119,55 +195,16 @@ function lookOverDom(){
 			var isGeoCoord = (/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/g).test(withoutParentheses);
 
 
-			if(matches && matches[1]!= "en" && matches[1]!= "fr" && matches[1]!= "string" && !isNum && !isDate && !isGeoCoord && isAllNum) {
+			if(matches && matches[1]!= "en" && matches[1]!= "fr" && matches[1]!= "string" && !isNum && !isDate && !isGeoCoord && isAllNum){
 				addInput(listM, measureRadioButton, a, a, checkbox); 
 			}else{  
 				addInput(listDim, dimensionRadioButton, a, a, radio); 
 
 			} 
 		}
-		updateInput();
+		updateInput(headerTable);
 	});
 
-	// Delete useless inputs
-	 function updateInput() {         
-	     var allVals = [];
-	     $("input[name=dimensionRadioButton]:radio").each(function() {
-			allVals.push($(this).val());
-		});
-		$("input[name=measureRadioButton]:checkbox").each(function() {
-			allVals.push($(this).val());
-		});
-
-		for(var i= 0; i < allVals.length; i++)
-		{
-     		if(headerTable.findIndex(allVals[i]) < 0){
-     			var nameSpace = allVals[i].remove("'")
-				nameSpace = nameSpace.underscore();;
-
-     			$('#'+nameSpace).remove();
-     			$('#'+nameSpace+"1").remove();
-
-     		}
-		}
-  	}
-
-	//Dimension selected  
-	$('input:radio[name=dimensionRadioButton]').bind('change', function() {
-		absciss = [];
-		value = $(this).val();
-		var abscissIndex = headerTable.findIndex(value);
-		finalTab = generateData(tableToJSON);
-
-		absciss = finalTab[abscissIndex];
-		reloadChart();
-	});
-
-	//When an user selects interest in an addtional measure, add this to alsoInterested
-	$('input:checkbox[name=measureRadioButton]').bind('change', function() {
-		updatebyNumberResultsOrdonate();
-		reloadChart();
-	});
 }
 
 /*
@@ -225,6 +262,7 @@ function addInput(lcontainer, name, value, text, type) {
 	$('<label />', { 'for': nameSpace, text: value, id:nameSpace+"1" }).appendTo(container);
 }
 
+//Reacts to changes dimensions in DOM
 function updatebyNumberResults(){
 	var tableToJSON = $('table#extension').tableToJSON({ ignoreColumns: [0] });
 	var keysTable = tableToJSON.first();
@@ -241,6 +279,8 @@ function updatebyNumberResults(){
 		legend_absciss = finalTab[abscissIndex];	
 	}
 }
+
+//Reacts to changes metrics in DOM
 function updatebyNumberResultsOrdonate(){
 
 	var tableToJSON = $('table#extension').tableToJSON({ ignoreColumns: [0] });
@@ -281,8 +321,8 @@ function updatebyNumberResultsOrdonate(){
 		generateOrdonate(ordonate_third, alsoInterested[2], tableToJSON, headerTable);
 
 		legend_ordonate = alsoInterested;
-
 		break;
+
 	default:
 		break;
 	}
@@ -331,8 +371,9 @@ function addChart() {
 
 
 google.load('visualization', '1', {
-	packages : [ 'corechart' ]
+	packages : [ 'corechart', 'map', 'table' ]
 });
+
 
 //absciss = [ 'France', 'Allemagne', 'Espagne', 'Italie', 'Angleterre' ];
 //ordonate = [ 65000000, 82000000, 45000000, 34000000, 6E6 ];
@@ -615,7 +656,103 @@ function submit(btn) {
 	graph_compte_mesure = 0;
 }
 
-//graphique type camanbert
+
+// Define a custom chart
+function optionsChart(){
+
+	var options = {
+			title : $('#chartTitle').val(),
+			titleTextStyle : {
+				color: $('#colorTitle').val(),
+				fontName: $('#fontName').val(),
+				fontSize: $('#fontSizeTitle').val(),
+				bold: $('#boldTitle').is(':checked'),
+				italic: $('#italicTitle').is(':checked')
+			},
+			legend: {
+				textStyle : {
+					color: $('#colorTitleLegend').val(),
+					fontName: $('#fontName').val(),
+					fontSize: $('#fontSizeTitleLegend').val(),
+					bold: $('#boldTitleLegend').is(':checked'),
+					italic: $('#italicTitleLegend').is(':checked')
+				}
+			},
+			width : 1000,
+			height : 563,
+			backgroundColor: $('#backgroundColorChart').val(),
+			hAxis : {
+				title : graphe_title[0]
+			},
+			vAxis : {
+				title : graphe_title[1]
+			}
+	};
+
+	return options;
+}
+
+//Map
+function drawMap(){
+
+	var dataMap = new google.visualization.DataTable();
+
+	dataMap.addColumn('number', 'LATITUDE', 'Latitude');
+	dataMap.addColumn('number', 'LONGITUDE', 'Longitude');
+	dataMap.addColumn('string', 'NAME', 'Name');
+ 	for (var i = 0; i < tlatitude.length; i++) {
+				dataMap.addRows([ [ tlatitude[i], tlongitude[i], tgeographicName[i] ] ]);
+			}
+
+	 var options = {
+    	icons: {
+      		default: {
+        		normal: 'http://icons.iconarchive.com/icons/icons-land/vista-map-markers/48/Map-Marker-Ball-Azure-icon.png',
+        		selected: 'http://icons.iconarchive.com/icons/icons-land/vista-map-markers/48/Map-Marker-Ball-Right-Azure-icon.png'
+      		}
+   		 }
+ 	 };
+
+      var map = new google.visualization.Table(document.getElementById('graphe'));
+              map.draw(dataMap, {showTip: true});
+
+
+}
+
+//Column chart
+function drawBarChart_vertical() {
+	var data_for_googleChart = insertData();
+
+	var options_bar = optionsChart();
+
+	// add chart into div #graph
+	var chart_column = new google.visualization.ColumnChart($('#graphe')[0]);
+	chart_column.draw(data_for_googleChart, options_bar);
+}
+
+//Bar chart
+function drawBarChart_horizontal() {
+	var data_for_googleChart = insertData();
+
+	var options_bar = optionsChart();
+
+	//Add chart into div #graph
+	var chart_bar = new google.visualization.BarChart($('#graphe')[0]);
+	chart_bar.draw(data_for_googleChart, options_bar);
+}
+
+//Line Chart
+function drawLineChart() {
+	var data_for_googleChart = insertData();
+
+	var options_line =  optionsChart();
+
+	//Add chart into div #graph
+	var chart_line = new google.visualization.LineChart($('#graphe')[0]);
+	chart_line.draw(data_for_googleChart, options_line);
+}
+
+//Pie chart
 function drawPieChart() {
 	var data_pie = new google.visualization.DataTable();
 	data_pie.addColumn('string', 'X');
@@ -633,132 +770,16 @@ function drawPieChart() {
 			is3D : true
 	};
 
-	var chart_pie = new google.visualization.PieChart(document
-			.getElementById('graphe'));
+	var chart_pie = new google.visualization.PieChart($('#graphe')[0]);
 	chart_pie.draw(data_pie, options);
 }
 
-//graphique type histogramme vertical
-function drawBarChart_vertical() {
-	var data_for_googleChart = insertData();
-
-	// here the option of our representation
-	var options_bar = {
-			title : $('#chartTitle').val(),
-			titleTextStyle : {
-				color: $('#colorTitle').val(),
-				fontName: $('#fontName').val(),
-				fontSize: $('#fontSizeTitle').val(),
-				bold: $('#boldTitle').is(':checked'),
-				italic: $('#italicTitle').is(':checked')
-			},
-			legend: {
-				textStyle : {
-					color: $('#colorTitleLegend').val(),
-					fontName: $('#fontName').val(),
-					fontSize: $('#fontSizeTitleLegend').val(),
-					bold: $('#boldTitleLegend').is(':checked'),
-					italic: $('#italicTitleLegend').is(':checked')
-				}
-			},
-			width : 1000,
-			height : 563,
-			backgroundColor: $('#backgroundColorChart').val(),
-			hAxis : {
-				title : graphe_title[0]
-			},
-			vAxis : {
-				title : graphe_title[1]
-			}
-	};
-	// we choose the area where we want to put our charts
-	var chart_column = new google.visualization.ColumnChart(document
-			.getElementById('graphe'));
-	chart_column.draw(data_for_googleChart, options_bar);
-}
-
-//graphique type histogramme horizontal
-function drawBarChart_horizontal() {
-	var data_for_googleChart = insertData();
-
-	var options_bar = {
-			title : $('#chartTitle').val(),
-			titleTextStyle : {
-				color: $('#colorTitle').val(),
-				fontName: $('#fontName').val(),
-				fontSize: $('#fontSizeTitle').val(),
-				bold: $('#boldTitle').is(':checked'),
-				italic: $('#italicTitle').is(':checked')
-			},
-			legend: {
-				textStyle : {
-					color: $('#colorTitleLegend').val(),
-					fontName: $('#fontName').val(),
-					fontSize: $('#fontSizeTitleLegend').val(),
-					bold: $('#boldTitleLegend').is(':checked'),
-					italic: $('#italicTitleLegend').is(':checked')
-				}
-			},
-			width : 1000,
-			height : 563,
-			backgroundColor: $('#backgroundColorChart').val(),
-			hAxis : {
-				title : graphe_title[0]
-			},
-			vAxis : {
-				title : graphe_title[1]
-			}
-	};
-
-	var chart_bar = new google.visualization.BarChart(document
-			.getElementById('graphe'));
-	chart_bar.draw(data_for_googleChart, options_bar);
-}
-
-//graphique type courbe
-function drawLineChart() {
-	var data_for_googleChart = insertData();
-
-	// here the option of our representation
-	var options_line = {
-			title : $('#chartTitle').val(),
-			titleTextStyle : {
-				color: $('#colorTitle').val(),
-				fontName: $('#fontName').val(),
-				fontSize: $('#fontSizeTitle').val(),
-				bold: $('#boldTitle').is(':checked'),
-				italic: $('#italicTitle').is(':checked')
-			},
-			legend: {
-				textStyle : {
-					color: $('#colorTitleLegend').val(),
-					fontName: $('#fontName').val(),
-					fontSize: $('#fontSizeTitleLegend').val(),
-					bold: $('#boldTitleLegend').is(':checked'),
-					italic: $('#italicTitleLegend').is(':checked')
-				}
-			},
-			width : 1000,
-			height : 563,
-			backgroundColor: $('#backgroundColorChart').val(),
-			hAxis : {
-				title : graphe_title[0]
-			},
-			vAxis : {
-				title : graphe_title[1]
-			}
-	};
-	// we choose the area where we want to put our charts
-	var chart_line = new google.visualization.LineChart(document
-			.getElementById('graphe'));
-	chart_line.draw(data_for_googleChart, options_line);
-}
-
-//function to insert data in charts
+//Add  data series to one of charts 
 function insertData() {
 	var tables = new google.visualization.DataTable();
 	if (document.getElementById("aggregator").value == 'Compte') {
-		//here we insert the data from our two mesures
+
+		//Add data series of 2 metrics
 		tables.addColumn('string', legend_absciss);
 		tables.addColumn('number', 'number of occurences');
 		for (var i = 0; i < graph_absciss.length; i++) {
@@ -768,7 +789,7 @@ function insertData() {
 	else {
 		switch (graph_compte_mesure) {
 		case 1:
-			//here we insert the data from our one mesure
+		//Add data series of a metric
 			tables.addColumn('string', legend_absciss);
 			tables.addColumn('number', legend_ordonate[0]);
 			for (var i = 0; i < graph_absciss.length; i++) {
@@ -776,7 +797,7 @@ function insertData() {
 			}
 			break;
 		case 2:
-			//here we insert the data from our two mesures
+		//Add data series of 2 metrics
 			tables.addColumn('string', legend_absciss);
 			tables.addColumn('number', legend_ordonate[0]);
 			tables.addColumn('number', legend_ordonate[1]);
@@ -785,7 +806,7 @@ function insertData() {
 			}
 			break;
 		case 3:
-			//here we insert the data from our three mesures
+		//Add data series of 3 metrics
 			tables.addColumn('string', legend_absciss);
 			tables.addColumn('number', legend_ordonate[0]);
 			tables.addColumn('number', legend_ordonate[1]);
@@ -795,7 +816,7 @@ function insertData() {
 			}
 			break;
 		default:
-			//here we insert the data from no mesures
+		//Add data series without metrics
 			tables.addColumn('string', legend_absciss);
 			tables.addColumn('number', 'number of occurences');
 			for (var i = 0; i < graph_absciss.length; i++) {
