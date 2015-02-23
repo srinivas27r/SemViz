@@ -77,6 +77,9 @@ function lookOverDom(){
 	headerTable = Object.extended(keysTable).keys();
 	var value;
 
+	$("#control-charts").show();
+
+
 	detectDimMetric(headerTable, tableToJSON);
 
 	//Dimension selected  
