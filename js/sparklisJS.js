@@ -102,31 +102,41 @@ function lookOverDom(){
 	visualizationMap(headerTable);
 }
 
-
 function visualizationMap(headerTable){
-
+	
 	tlongitude, tlatitude, tgeographicName = [];
 	var tableToJSON = $('table#extension').tableToJSON({ ignoreColumns: [0]});
-
 
 	longitude = headerTable.find(/long/);
 	latitude = headerTable.find(/lat/);
 	geographicName = headerTable.find(/place|country|town|city/);
 
 	if(longitude && latitude && geographicName){
-
-		lala(longitude, tlongitude);
-		lala(latitude, tlatitude);
-		lala(geographicName, tgeographicName);
-		
+		tlongitude = lala(longitude, headerTable, tableToJSON);
+		tlatitude = lala(latitude, headerTable, tableToJSON);
+		tgeographicName = lala_name(geographicName, headerTable, tableToJSON);
 	}	
-
-	function lala(name, tab){
-		var value = headerTable.findIndex(name);
-		finalTab = generateData(tableToJSON);
-		tab = finalTab[value];
-	}
 }
+
+function lala(name, headerTable, tableToJSON){
+	var tab =[];
+	var value = headerTable.findIndex(name);
+	finalTab = generateData(tableToJSON);
+	finalTab[value].forEach(function(a) {
+		var parseOrdonates = parseFloat(a);
+		tab.add(parseOrdonates);
+	});
+	return tab;
+	
+}
+function lala_name(name, headerTable, tableToJSON){
+	var tab =[];
+	var value = headerTable.findIndex(name);
+	finalTab = generateData(tableToJSON);
+	tab = finalTab[value];
+	return tab;
+}
+
 
 // Delete useless inputs
  function updateInput(headerTable) {         
@@ -695,30 +705,48 @@ function optionsChart(){
 	return options;
 }
 
-//Map
-function drawMap(){
 
-	var dataMap = new google.visualization.DataTable();
-
-	dataMap.addColumn('number', 'LATITUDE', 'Latitude');
-	dataMap.addColumn('number', 'LONGITUDE', 'Longitude');
-	dataMap.addColumn('string', 'NAME', 'Name');
- 	for (var i = 0; i < tlatitude.length; i++) {
-				dataMap.addRows([ [ tlatitude[i], tlongitude[i], tgeographicName[i] ] ]);
+//function to compare two array
+function compareArray(a1, a2)
+{
+	if (a1.length != a2.length) {
+		return false;
+	} else {
+		for (var a = 0; a < a1.length; ++a) {
+			if (a1[a] != a2[a]) {
+				return false;
 			}
+		}
+	}
+	return true;
+}
 
-	 var options = {
-    	icons: {
-      		default: {
-        		normal: 'http://icons.iconarchive.com/icons/icons-land/vista-map-markers/48/Map-Marker-Ball-Azure-icon.png',
-        		selected: 'http://icons.iconarchive.com/icons/icons-land/vista-map-markers/48/Map-Marker-Ball-Right-Azure-icon.png'
-      		}
-   		 }
- 	 };
-
-      var map = new google.visualization.Table(document.getElementById('graphe'));
-              map.draw(dataMap, {showTip: true});
-
+//Map
+function drawMapChart() {
+	// corespondance des tableau
+	var don =  [];
+	if((compareArray(tlongitude,graph_ordonate)||compareArray(tlongitude,graph_ordonate_second)) && (compareArray(tlatitude,graph_ordonate)||compareArray(tlatitude,graph_ordonate_second))){// cas troisième mesure
+		don = graph_ordonate_third;
+	}
+	else if((compareArray(tlongitude,graph_ordonate)||compareArray(tlongitude,graph_ordonate_third)) &&(compareArray(tlatitude,graph_ordonate)||compareArray(tlatitude,graph_ordonate_third))){// cas deuxième mesure
+		don = graph_ordonate_second;
+	}
+	else {// cas premier mesure
+		don = graph_ordonate;
+	}
+	
+	var data_graph = new google.visualization.DataTable();
+	data_graph.addColumn('number', 'LATITUDE', 'Latitude');
+	data_graph.addColumn('number', 'LONGITUDE', 'Longitude');
+	data_graph.addColumn('number', 'VALUE', 'Value');
+	for (var i = 0; i < tlatitude.length; i++) {
+		data_graph.addRows([ [ tlatitude[i], tlongitude[i], don[i] ] ]);
+	}
+	  // here the option of our representation
+	  var options_graph = optionsChart();
+	
+	    var chart_graph = new google.visualization.GeoChart(document.getElementById('graphe'));
+	    chart_graph.draw(data_graph, options_graph);
 
 }
 
