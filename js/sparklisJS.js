@@ -98,43 +98,27 @@ function lookOverDom(){
 		updatebyNumberResultsOrdonate();
 		reloadChart();
 	});
-
-	visualizationMap(headerTable);
 }
 
-function visualizationMap(headerTable){
+function visualizationMap(){
 	
 	tlongitude, tlatitude, tgeographicName = [];
 	var tableToJSON = $('table#extension').tableToJSON({ ignoreColumns: [0]});
 
+	//Get header of tableToJSON
+	var keysTable = tableToJSON.first();
+	headerTable = Object.extended(keysTable).keys();
+	
 	longitude = headerTable.find(/long/);
 	latitude = headerTable.find(/lat/);
 	geographicName = headerTable.find(/place|country|town|city/);
 
 	if(longitude && latitude && geographicName){
-		tlongitude = lala(longitude, headerTable, tableToJSON);
-		tlatitude = lala(latitude, headerTable, tableToJSON);
-		tgeographicName = lala_name(geographicName, headerTable, tableToJSON);
+		generateOrdonate(tlongitude, longitude, tableToJSON, headerTable);
+		generateOrdonate(tlatitude, latitude, tableToJSON, headerTable);
+	}else{
+		Alert.error('Review Request. It is necessary to have a latitude, longitude and a place to build a map.', 'Map', {displayDuration: 0});
 	}	
-}
-
-function lala(name, headerTable, tableToJSON){
-	var tab =[];
-	var value = headerTable.findIndex(name);
-	finalTab = generateData(tableToJSON);
-	finalTab[value].forEach(function(a) {
-		var parseOrdonates = parseFloat(a);
-		tab.add(parseOrdonates);
-	});
-	return tab;
-	
-}
-function lala_name(name, headerTable, tableToJSON){
-	var tab =[];
-	var value = headerTable.findIndex(name);
-	finalTab = generateData(tableToJSON);
-	tab = finalTab[value];
-	return tab;
 }
 
 
@@ -652,6 +636,7 @@ function submit(btn) {
 		google.setOnLoadCallback(drawPieChart());
 		break;
 	case 'map':
+		visualizationMap();
 		google.setOnLoadCallback(drawMapChart());
 		break;
 	case 'histo_vertical':
