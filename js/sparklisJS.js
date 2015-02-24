@@ -31,6 +31,7 @@ var tlongitude = [];
 var tlatitude = [];
 var tgeographicName = [];
 var longitude, latitude, geographicName;
+var select = 0;
 
 //MO reacts to changes in a DOM. It detects when 'extension' appears.
 var observer = new MutationObserver(function(mutations) {
@@ -98,6 +99,8 @@ function lookOverDom(){
 		updatebyNumberResultsOrdonate();
 		reloadChart();
 	});
+	
+	visualizationMap();
 }
 
 function visualizationMap(){
@@ -114,13 +117,24 @@ function visualizationMap(){
 	geographicName = headerTable.find(/place|country|town|city/);
 
 	if(longitude && latitude && geographicName){
-		generateOrdonate(tlongitude, longitude, tableToJSON, headerTable);
-		generateOrdonate(tlatitude, latitude, tableToJSON, headerTable);
-	}else{
-		Alert.error('Review Request. It is necessary to have a latitude, longitude and a place to build a map.', 'Map', {displayDuration: 0});
+		//generateOrdonate(tlongitude, longitude, tableToJSON, headerTable);
+		//generateOrdonate(tlatitude, latitude, tableToJSON, headerTable);
+		tlongitude = generate_long_lat(longitude, headerTable, tableToJSON);
+		tlatitude = generate_long_lat(latitude, headerTable, tableToJSON);
 	}	
 }
 
+function generate_long_lat(name, headerTable, tableToJSON){
+	var tab =[];
+	var value = headerTable.findIndex(name);
+	finalTab = generateData(tableToJSON);
+	finalTab[value].forEach(function(a) {
+		var parseOrdonates = parseFloat(a);
+		tab.add(parseOrdonates);
+	});
+	return tab;
+	
+}
 
 // Delete useless inputs
  function updateInput(headerTable) {         
@@ -212,7 +226,6 @@ function detectDimMetric(headerTable, tableToJSON){
  * string value : an header 
  */
 function generateOrdonate(ordonate, value, tableToJSON, headerTable ){
-
 	var ordonateesIndex = headerTable.findIndex(value);
 
 	finalTab = generateData(tableToJSON);
@@ -299,7 +312,7 @@ function updatebyNumberResultsOrdonate(){
 	finalTab = generateData(tableToJSON);
 
 	legend_ordonate =[];
-
+	select =  alsoInterested.length;
 	switch (alsoInterested.length) {
 	case 1:
 		generateOrdonate(ordonate, alsoInterested[0], tableToJSON, headerTable);
@@ -372,9 +385,9 @@ google.load('visualization', '1', {
 });
 
 
-//absciss = [ 'France', 'Allemagne', 'Espagne', 'Italie', 'Angleterre' ];
-//ordonate = [ 65000000, 82000000, 45000000, 34000000, 6E6 ];
-//graphe_title = [ 'Country', 'Population' ]
+
+//traitement des donnes une fois recuperer
+
 
 function in_array(string, array){
 	var result = false;
@@ -636,7 +649,6 @@ function submit(btn) {
 		google.setOnLoadCallback(drawPieChart());
 		break;
 	case 'map':
-		visualizationMap();
 		google.setOnLoadCallback(drawMapChart());
 		break;
 	case 'histo_vertical':
@@ -708,31 +720,43 @@ function compareArray(a1, a2)
 
 //Map
 function drawMapChart() {
-	// corespondance des tableau
-	var don =  [];
-	if((compareArray(tlongitude,graph_ordonate)||compareArray(tlongitude,graph_ordonate_second)) && (compareArray(tlatitude,graph_ordonate)||compareArray(tlatitude,graph_ordonate_second))){// cas troisième mesure
-		don = graph_ordonate_third;
+	if (tlongitude.length !=0 && tlatitude.length!=0){
+		if (select == 3){
+			// corespondance des tableau
+			var don =  [];
+			if((compareArray(tlongitude,graph_ordonate)||compareArray(tlongitude,graph_ordonate_second)) && (compareArray(tlatitude,graph_ordonate)||compareArray(tlatitude,graph_ordonate_second))){// cas troisième mesure
+				don = graph_ordonate_third;
+			}
+			else if((compareArray(tlongitude,graph_ordonate)||compareArray(tlongitude,graph_ordonate_third)) &&(compareArray(tlatitude,graph_ordonate)||compareArray(tlatitude,graph_ordonate_third))){// cas deuxième mesure
+				don = graph_ordonate_second;
+			}
+			else {// cas premier mesure
+				don = graph_ordonate;
+			}
+			
+			var data_graph = new google.visualization.DataTable();
+			data_graph.addRows(1);
+			data_graph.addColumn('number', 'LATITUDE', 'Latitude');
+			data_graph.addColumn('number', 'LONGITUDE', 'Longitude');
+			data_graph.addColumn('number', 'VALUE', 'Value');
+			for (var i = 0; i < tlatitude.length; i++) {
+				data_graph.addRows([ [ tlatitude[i], tlongitude[i], don[i] ] ]);
+			}
+			  // here the option of our representation
+			  var options_graph = optionsChart();
+			
+			    var chart_graph = new google.visualization.GeoChart(document.getElementById('graphe'));
+			    chart_graph.draw(data_graph, options_graph);
+			   
+		}
+		else {
+			//Alert.error('Review Request. Too many measure or not suffisance.', 'Map', {displayDuration: 0});
+		}
 	}
-	else if((compareArray(tlongitude,graph_ordonate)||compareArray(tlongitude,graph_ordonate_third)) &&(compareArray(tlatitude,graph_ordonate)||compareArray(tlatitude,graph_ordonate_third))){// cas deuxième mesure
-		don = graph_ordonate_second;
-	}
-	else {// cas premier mesure
-		don = graph_ordonate;
+	else {
+		//Alert.error('Review Request. It is necessary to have a latitude, longitude and a place to build a map.', 'Map', {displayDuration: 0});
 	}
 	
-	var data_graph = new google.visualization.DataTable();
-	data_graph.addColumn('number', 'LATITUDE', 'Latitude');
-	data_graph.addColumn('number', 'LONGITUDE', 'Longitude');
-	data_graph.addColumn('number', 'VALUE', 'Value');
-	for (var i = 0; i < tlatitude.length; i++) {
-		data_graph.addRows([ [ tlatitude[i], tlongitude[i], don[i] ] ]);
-	}
-	  // here the option of our representation
-	  var options_graph = optionsChart();
-	
-	    var chart_graph = new google.visualization.GeoChart(document.getElementById('graphe'));
-	    chart_graph.draw(data_graph, options_graph);
-
 }
 
 //Column chart
