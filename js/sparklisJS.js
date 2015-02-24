@@ -109,8 +109,8 @@ function visualizationMap(){
 	var keysTable = tableToJSON.first();
 	headerTable = Object.extended(keysTable).keys();
 	
-	longitude = headerTable.find(/long/);
-	latitude = headerTable.find(/lat/);
+	longitude = headerTable.find(/\w*long\b/);
+	latitude = headerTable.find(/\w*lat\b/);
 	geographicName = headerTable.find(/place|country|town|city/);
 
 	if(longitude && latitude && geographicName){
