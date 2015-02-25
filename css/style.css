@@ -123,7 +123,7 @@ table #settings {
 }
 
 #charts {
-	white-space:nowrap;
+	white-space: nowrap;
 	overflow-y: hidden;
 	overflow-x: auto;
 }
@@ -140,25 +140,40 @@ table #settings {
 }
 
 .chart:hover {
-    background-color: #c8a0c8;
+	opacity: 0.7;
+	background-color: #c8a0c8;
 }
 
-.active{
+.chart span {
+	display: none;
+	zoom: 6;
+	z-index: 1;
+}
+
+.chart:hover span {
+	opacity: 1;
+	width: 166px;
+	display: block;
+	position: absolute;
+	background-color: white;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.active {
 	zoom: 1;
 	-ms-zoom: 1;
 	-webkit-zoom: 1;
 	-moz-transform: scale(1, 1);
 	-moz-transform-origin: left center;
-
 }
 
 .modify {
 	text-align: left;
 	margin-left: 75px;
-	margin-top: -18px;
+	margin-top: -20px;
 }
 
 .close {
 	text-align: left;
-	margin-left:15px;
 }
