@@ -118,8 +118,7 @@ table #settings {
 }
 
 #chartClicked {
-	text-align: center;
-	display: inline-block;
+    text-align: -webkit-center;
 }
 
 #charts {
@@ -171,7 +170,6 @@ table #settings {
 .modify {
 	text-align: left;
 	margin-left: 75px;
-	margin-top: -20px;
 }
 
 .close {
