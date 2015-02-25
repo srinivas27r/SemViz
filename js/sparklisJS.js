@@ -373,12 +373,12 @@ function addChart() {
 		//modify button
 		$('<div class="modify">Modify</div>').appendTo(chart2);
 		var current2 = $('#' + name).clone().appendTo(chart2);
-
+		$('.modify').click(function() {
+			//La partie de Romain
+			alert('Not available yet ! '); 
+		});
 	});
-	//NE FONCTIONNE PAS
-	$('.modify').click(function() {
-		alert('Not available yet ! '); 
-	});
+	
 }
 
 
