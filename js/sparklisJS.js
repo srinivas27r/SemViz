@@ -438,13 +438,11 @@ function addChart() {
 						document.getElementById("graphe").innerHTML = "";
 						var chart = $('#'+name).parent().children().get(2).innerHTML;; 
 						document.getElementById("graphe").innerHTML = chart;
-						$(this).closest('li').remove();
-						//Delete too the chartClicked
-						if($('#currentChartClicked')){
-							if($(this).closest('li')[0].children[1].id == $('#currentChartClicked')[0].children[1].id) {
-								$('#currentChartClicked')[0].innerHTML = "";
-							}
-						}
+						
+						
+						$('#'+name).closest('li').remove();
+						$('#chartClicked').empty();
+						
 						Alert.info('You can now modify your chart.', 'Chart Modification');
 						
 					}
