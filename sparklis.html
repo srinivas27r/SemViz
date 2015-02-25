@@ -508,9 +508,8 @@
 		<div class="content">
 			<!-- Onglet de navigation -->
 			<ul id="onglets">
-				<li><a href="#debut" data-toggle="tab">Debut</a></li>
-				<li><a href="#graphiques" data-toggle="tab">Graphiques</a></li>
-				<li><a href="#personnaliser" data-toggle="tab">Personnaliser</a></li>
+				<li><a href="#debut" data-toggle="tab">Chart selection</a></li>
+				<li><a href="#personnaliser" data-toggle="tab">Personalize</a></li>
 			</ul>
 
 			<!-- Pannel de choix dimension /mesures -->
@@ -552,57 +551,27 @@
 										<option value="Verticalement">Verticalement</option>
 									</select>
 								</p>
-								<input type="checkbox" name="intervertirLC" id="intervertirLC" />
-								<label for="intervertirLC">Intervertir lignes et
-									colonnes</label> <br /> <br /> <b>Graphiques recommandés</b><br />
+								<br /> <b>Graphiques recommandés</b><br />
 								<div id="graphs">
 									<input type="radio" name="graphs" id="line" value="line"
-										onclick="submit('line');" /><label
-										for="line"><img src="resources/chart/graph4.png"
-										" alt="line" /></label> <input type="radio" name="graphs"
-										id="histo_vertical" value="histo_vertical"
-										onclick="submit('histo_horizontal');" /><label
-										for="histo_vertical"><img src="resources/chart/graph1.png"
-										" alt="histo_vertical" /></label><br /> <input type="radio" name="graphs"
-										id="histo_horizontal" value="histo_horizontal"
-										onclick="submit('histo_vertical');" /><label
-										for="histo_horizontal"><img src="resources/chart/graph2.png"
-										alt="histo_horizontal" /></label> <input type="radio" name="graphs" id="pie"
-										value="pie" onclick="submit('pie');" /><label for="pie"><img
-										src="resources/chart/graph5.png" alt="pie" /></label>
-										<input type="radio" name="graphs" id="map"
-										value="map" onclick="submit('map');" /><label for="map"><img
+										onclick="submit('line');" /><label for="line"><img
+										src="resources/chart/graph4.png" " alt="line" /></label> <input
+										type="radio" name="graphs" id="histo_vertical"
+										value="histo_vertical" onclick="submit('histo_horizontal');" /><label
+										for="histo_vertical"><img
+										src="resources/chart/graph1.png" " alt="histo_vertical" /></label><br />
+									<input type="radio" name="graphs" id="histo_horizontal"
+										value="histo_horizontal" onclick="submit('histo_vertical');" /><label
+										for="histo_horizontal"><img
+										src="resources/chart/graph2.png" alt="histo_horizontal" /></label> <input
+										type="radio" name="graphs" id="pie" value="pie"
+										onclick="submit('pie');" /><label for="pie"><img
+										src="resources/chart/graph5.png" alt="pie" /></label> <input
+										type="radio" name="graphs" id="map" value="map"
+										onclick="submit('map');" /><label for="map"><img
 										src="resources/chart/graph6.png" alt="map" /></label>
 								</div>
-								<!--<button onclick="submit('point');">Point Chart</button>
-						<button onclick="submit('map');">Map Chart</button>-->
 							</div>
-
-
-							<div id="graphiques">
-								<div id="graphs2">
-									<table style="border: none;">
-										<tr style="border: none;">
-											<td style="border: none;"><input type="radio"
-												name="graphs" id="courbe" value="courbe"
-												onclick="submit('histo_horizontal');" /><label for="courbe"><img
-													src="resources/chart/graph1.png" " alt="courbe" /></label><br />
-												<input type="radio" name="graphs" id="colonne"
-												value="colonne" onclick="submit('histo_vertical');" /><label
-												for="colonne"><img src="resources/chart/graph2.png"
-													" alt="colonne" /></label><br /> <input type="radio"
-												name="graphs" id="barre" value="barre"
-												onclick="submit('pie');" /><label for="barre"><img
-													src="resources/chart/graph3.png" alt="barre" /></label><br /> <input
-												type="radio" name="graphs" id="carte" value="carte"
-												onclick="submit('line');" /><label for="carte"><img
-													src="resources/chart/graph4.png" alt="carte" /></label><br /></td>
-										</tr>
-									</table>
-								</div>
-							</div>
-
-
 							<div id="personnaliser">
 								<p id="titre">
 									Titre <input type="checkbox" name="boldTitle" id="boldTitle"
@@ -683,25 +652,7 @@
 					$('#onglets').tabs();
 				})(jQuery);
 				$('#graphs input:radio').addClass('input_hidden');
-				$('#graphs2 input:radio').addClass('input_hidden');
-				$('#legende input:radio').addClass('input_hidden');
-				$('#titre input:radio').addClass('input_hidden');
 				$('#graphs label').click(
-						function() {
-							$(this).addClass('selected').siblings()
-									.removeClass('selected');
-						});
-				$('#graphs2 label').click(
-						function() {
-							$(this).addClass('selected').siblings()
-									.removeClass('selected');
-						});
-				$('#titre label').click(
-						function() {
-							$(this).addClass('selected').siblings()
-									.removeClass('selected');
-						});
-				$('#legende label').click(
 						function() {
 							$(this).addClass('selected').siblings()
 									.removeClass('selected');
