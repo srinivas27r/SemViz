@@ -762,6 +762,13 @@ function optionsChart(){
 					italic: $('#italicTitleLegend').is(':checked')
 				}
 			},
+			explorer: {
+              actions: [
+                  'dragToZoom',
+                  'rightClickToReset'
+              ],
+              maxZoomIn:0.05
+          	}, 
 			width : 1000,
 			height : 563,
 			backgroundColor: $('#backgroundColorChart').val(),
