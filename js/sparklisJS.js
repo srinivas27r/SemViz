@@ -99,19 +99,19 @@ function lookOverDom(){
 		updatebyNumberResultsOrdonate();
 		reloadChart();
 	});
-	
+
 	visualizationMap();
 }
 
 function visualizationMap(){
-	
+
 	tlongitude, tlatitude, tgeographicName = [];
 	var tableToJSON = $('table#extension').tableToJSON({ ignoreColumns: [0]});
 
 	//Get header of tableToJSON
 	var keysTable = tableToJSON.first();
 	headerTable = Object.extended(keysTable).keys();
-	
+
 	longitude = headerTable.find(/\w*long\b/);
 	latitude = headerTable.find(/\w*lat\b/);
 	geographicName = headerTable.find(/place|country|town|city/);
@@ -133,13 +133,13 @@ function generate_long_lat(name, headerTable, tableToJSON){
 		tab.add(parseOrdonates);
 	});
 	return tab;
-	
+
 }
 
-// Delete useless inputs
- function updateInput(headerTable) {         
-     var allVals = [];
-     $("input[name=dimensionRadioButton]:radio").each(function() {
+//Delete useless inputs
+function updateInput(headerTable) {         
+	var allVals = [];
+	$("input[name=dimensionRadioButton]:radio").each(function() {
 		allVals.push($(this).val());
 	});
 	$("input[name=measureRadioButton]:checkbox").each(function() {
@@ -148,14 +148,14 @@ function generate_long_lat(name, headerTable, tableToJSON){
 
 	for(var i= 0; i < allVals.length; i++)
 	{
- 		if(headerTable.findIndex(allVals[i]) < 0){
- 			var nameSpace = allVals[i].remove("'")
+		if(headerTable.findIndex(allVals[i]) < 0){
+			var nameSpace = allVals[i].remove("'")
 			nameSpace = nameSpace.underscore();;
 
- 			$('#'+nameSpace).remove();
- 			$('#'+nameSpace+"1").remove();
+			$('#'+nameSpace).remove();
+			$('#'+nameSpace+"1").remove();
 
- 		}
+		}
 	}
 }
 
@@ -345,19 +345,18 @@ function addChart() {
 	var chart = $('<li class="chart" id="chart' + numGraphe + '">').appendTo(aera); 
 	// close button
 	$('<div class="close"><img id="delete-current-focus" height="16" title="Click on this red cross to delete the current focus" alt="Delete" src="icon-delete.png"></div>').appendTo(chart); 
-	$('<div class="modify">Modify</div>').appendTo(chart); 
-	
+	$('<span>' + $('#chartTitle').val() + '</span>').appendTo(chart);
 	//clone the current graph ino the list div 
 	var current = $('#graphe').clone();
 	current[0].id = current[0].id + numGraphe;
 	current.appendTo(chart);
-	
+
 	//add function in order to delete the list object
 	$('.close').click(function() {
 		$(this).closest('li').remove();
 		//Delete too the chartClicked
 		if($('#currentChartClicked')){
-			if($(this).closest('li')[0].children[1].id == $('#currentChartClicked')[0].children[1].id) {
+			if($(this).closest('li')[0].children[2].id == $('#currentChartClicked')[0].children[1].id) {
 				$('#currentChartClicked')[0].innerHTML = "";
 			}
 		}
@@ -369,12 +368,16 @@ function addChart() {
 		$(this).addClass('selected');
 		var aera2 = document.getElementById('chartClicked');
 		aera2.innerHTML = "";
-		var name = $(this)[0].children[1].id;
-		var chart2 = $('<div id="currentChartClicked" name="' + name + '">').appendTo(aera2);		
+		var name = $(this)[0].children[2].id;
+		var chart2 = $('<div id="currentChartClicked" name="' + name + '">').appendTo(aera2);
+		//modify button
+		$('<div class="modify">Modify</div>').appendTo(chart2);
 		var current2 = $('#' + name).clone().appendTo(chart2);
+
 	});
+	//NE FONCTIONNE PAS
 	$('.modify').click(function() {
-		Alert.warning('Not available yet !', 'Chart', {displayDuration: 0});
+		alert('Not available yet ! '); 
 	});
 }
 
@@ -407,21 +410,21 @@ function aggreg_count() {
 	if(!absciss){
 		Alert.info('Choose at least a metric and  dimension choice is mandatory.', 'Chart modeling');
 	} else {
-	for (var i = 0; i < absciss.length; i++) {
-		if (!in_array(absciss[i],graph_absciss)){
-			graph_ordonate [increm] = 1;
-			graph_absciss.add(absciss[i]);
-			for (var y=0; y < absciss.length; y++) {
-				if (i!=y) {
-					if (absciss[i]==absciss[y]){
-						graph_ordonate [increm] = graph_ordonate[increm]+1;
+		for (var i = 0; i < absciss.length; i++) {
+			if (!in_array(absciss[i],graph_absciss)){
+				graph_ordonate [increm] = 1;
+				graph_absciss.add(absciss[i]);
+				for (var y=0; y < absciss.length; y++) {
+					if (i!=y) {
+						if (absciss[i]==absciss[y]){
+							graph_ordonate [increm] = graph_ordonate[increm]+1;
+						}
 					}
 				}
+				increm = increm +1;
 			}
-			increm = increm +1;
 		}
 	}
-}
 
 }
 
@@ -667,7 +670,7 @@ function submit(btn) {
 }
 
 
-// Define a custom chart
+//Define a custom chart
 function optionsChart(){
 
 	var options = {
@@ -724,16 +727,16 @@ function drawMapChart() {
 		if (select == 3){
 			// corespondance des tableau
 			var don =  [];
-			if((compareArray(tlongitude,graph_ordonate)||compareArray(tlongitude,graph_ordonate_second)) && (compareArray(tlatitude,graph_ordonate)||compareArray(tlatitude,graph_ordonate_second))){// cas troisième mesure
+			if((compareArray(tlongitude,graph_ordonate)||compareArray(tlongitude,graph_ordonate_second)) && (compareArray(tlatitude,graph_ordonate)||compareArray(tlatitude,graph_ordonate_second))){// cas troisiÃ¨me mesure
 				don = graph_ordonate_third;
 			}
-			else if((compareArray(tlongitude,graph_ordonate)||compareArray(tlongitude,graph_ordonate_third)) &&(compareArray(tlatitude,graph_ordonate)||compareArray(tlatitude,graph_ordonate_third))){// cas deuxième mesure
+			else if((compareArray(tlongitude,graph_ordonate)||compareArray(tlongitude,graph_ordonate_third)) &&(compareArray(tlatitude,graph_ordonate)||compareArray(tlatitude,graph_ordonate_third))){// cas deuxiÃ¨me mesure
 				don = graph_ordonate_second;
 			}
 			else {// cas premier mesure
 				don = graph_ordonate;
 			}
-			
+
 			var data_graph = new google.visualization.DataTable();
 			data_graph.addRows(1);
 			data_graph.addColumn('number', 'LATITUDE', 'Latitude');
@@ -742,12 +745,12 @@ function drawMapChart() {
 			for (var i = 0; i < tlatitude.length; i++) {
 				data_graph.addRows([ [ tlatitude[i], tlongitude[i], don[i] ] ]);
 			}
-			  // here the option of our representation
-			  var options_graph = optionsChart();
-			
-			    var chart_graph = new google.visualization.GeoChart(document.getElementById('graphe'));
-			    chart_graph.draw(data_graph, options_graph);
-			   
+			// here the option of our representation
+			var options_graph = optionsChart();
+
+			var chart_graph = new google.visualization.GeoChart(document.getElementById('graphe'));
+			chart_graph.draw(data_graph, options_graph);
+
 		}
 		else {
 			//Alert.error('Review Request. Too many measure or not suffisance.', 'Map', {displayDuration: 0});
@@ -756,7 +759,7 @@ function drawMapChart() {
 	else {
 		//Alert.error('Review Request. It is necessary to have a latitude, longitude and a place to build a map.', 'Map', {displayDuration: 0});
 	}
-	
+
 }
 
 //Column chart
@@ -829,7 +832,7 @@ function insertData() {
 	else {
 		switch (graph_compte_mesure) {
 		case 1:
-		//Add data series of a metric
+			//Add data series of a metric
 			tables.addColumn('string', legend_absciss);
 			tables.addColumn('number', legend_ordonate[0]);
 			for (var i = 0; i < graph_absciss.length; i++) {
@@ -837,7 +840,7 @@ function insertData() {
 			}
 			break;
 		case 2:
-		//Add data series of 2 metrics
+			//Add data series of 2 metrics
 			tables.addColumn('string', legend_absciss);
 			tables.addColumn('number', legend_ordonate[0]);
 			tables.addColumn('number', legend_ordonate[1]);
@@ -846,7 +849,7 @@ function insertData() {
 			}
 			break;
 		case 3:
-		//Add data series of 3 metrics
+			//Add data series of 3 metrics
 			tables.addColumn('string', legend_absciss);
 			tables.addColumn('number', legend_ordonate[0]);
 			tables.addColumn('number', legend_ordonate[1]);
@@ -856,12 +859,12 @@ function insertData() {
 			}
 			break;
 		default:
-		//Add data series without metrics
+			//Add data series without metrics
 			tables.addColumn('string', legend_absciss);
-			tables.addColumn('number', 'number of occurences');
-			for (var i = 0; i < graph_absciss.length; i++) {
-				tables.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
-			}
+		tables.addColumn('number', 'number of occurences');
+		for (var i = 0; i < graph_absciss.length; i++) {
+			tables.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
+		}
 		}
 	}
 	return tables;
