@@ -132,10 +132,7 @@ table #settings {
 	display: inline-block;
 	border: 1px solid #c8a0c8;
 	zoom: 0.25;
-	-ms-zoom: 0.25;
-	-webkit-zoom: 0.25;
 	-moz-transform: scale(0.25);
-	-moz-transform-origin: left center;
 	border-radius: 17px;
 	margin-right: 5px;
 	margin-left: 5px;
