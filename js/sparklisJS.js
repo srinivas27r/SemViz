@@ -391,8 +391,8 @@ function addChart() {
 		$('.modify').click(function() {
 			$('.modify').click(function() {
 				//Detection dimensions and measure of current state
-				var dimensionCurrent = [];
-				var measureCurrent = [];
+				var dimensionCurrent = [""];
+				var measureCurrent = [""];
 				$("input[name=dimensionRadioButton]:radio").each(function() {
 					dimensionCurrent.push($(this).val());
 				});
@@ -404,13 +404,16 @@ function addChart() {
 				var name= $(this).attr("name");
 				var dimension = $('#'+name).parent().children().get(3).innerHTML; 
 				var measure = $('#'+name).parent().children().get(4).innerHTML;
+				var tabDimension=[];
+				var tabMeasure=[];
 				var reg = new RegExp("[,;]+","g"); 
-				var tabDimension= dimension.split(reg); 
-				var tabMeasure= measure.split(reg); 
+				tabDimension= dimension.split(reg); 
+				tabMeasure= measure.split(reg); 
 
 				//check out if dimension of chart is still in the request
 				var dimensionPresent=0;
 				var measurePresent=0;
+				
 				
 				if (tabDimension.length > dimensionCurrent.length || tabMeasure.length > measureCurrent.length	){
 					Alert.error('Yours request has changed, any modification is now impossible', 'Modify', {displayDuration: 0});
@@ -444,7 +447,12 @@ function addChart() {
 						$('#chartClicked').empty();
 						
 						Alert.info('You can now modify your chart.', 'Chart Modification');
+						return; 
 						
+					}
+					else {
+						Alert.error('Yours request has changed, any modification is now impossible', 'Modify', {displayDuration: 0});
+						return; 
 					}
 			});
 		});
