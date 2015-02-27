@@ -536,22 +536,22 @@
 						<div id="contenus-onglets">
 							<div id="debut">
 								<p>
-									Agrégation des données : <select name="aggregator"
+									Data aggregation : <select name="aggregator"
 										id="aggregator">
-										<option value="Aucun">Aucun</option>
-										<option value="Somme">Somme</option>
-										<option value="Moyenne">Moyenne</option>
-										<option value="Compte">Compte</option>
+										<option value="Aucun">None</option>
+										<option value="Somme">Sum</option>
+										<option value="Moyenne">Average</option>
+										<option value="Compte">Count</option>
 									</select>
 								</p>
 								<p>
-									Associer les plages : <select name="associerPlages"
+									Combine data range : <select name="associerPlages"
 										id="associerPlages">
-										<option value="Horizontalement">Horizontalement</option>
-										<option value="Verticalement">Verticalement</option>
+										<option value="Horizontalement">Horizontally</option>
+										<option value="Verticalement">Vertically</option>
 									</select>
 								</p>
-								<br /> <b>Graphiques recommandés</b><br />
+								<br /> <b>Recommended charts</b><br />
 								<div id="graphs">
 									<input type="radio" name="graphs" id="line" value="line"
 										onclick="submit('line');" /><label for="line"><img
@@ -574,7 +574,7 @@
 							</div>
 							<div id="personnaliser">
 								<p id="titre">
-									Titre <input type="checkbox" name="boldTitle" id="boldTitle"
+									Title <input type="checkbox" name="boldTitle" id="boldTitle"
 										value="boldTitle" /><label for="boldTitle"><img
 										src="resources/chart/bold.png" " alt="boldTitle" /></label> <input
 										type="checkbox" name="italicTitle" id="italicTitle"
@@ -598,7 +598,7 @@
 									<input id="chartTitle" type="text" name="chartTitle"
 										value="Titre du graphique" />
 								</p>
-								<p>Légende</p>
+								<p>Legend</p>
 								<p id="legende">
 									<input type="checkbox" name="boldTitleLegend"
 										id="boldTitleLegend" value="boldTitleLegend" /><label
@@ -623,14 +623,14 @@
 									</select>
 								</p>
 								<p>
-									Police <select name="fontName" id="fontName">
+									Font <select name="fontName" id="fontName">
 										<option value="Arial">Arial</option>
 										<option value="Courier New">Courier New</option>
 										<option value="Times New Roman">Times New Roman</option>
 									</select>
 								</p>
 								<p>
-									Arrière-plan <select name="backgroundColorChart"
+									Background <select name="backgroundColorChart"
 										id="backgroundColorChart">
 										<option value="White">White</option>
 										<option value="Grey">Grey</option>
@@ -638,7 +638,7 @@
 								</p>
 							</div>
 						</div> <input onclick="addChart()" type="submit" value="Inserer" /> <input
-						type="submit" value="Annuler" /> <input onclick="reloadChart()" type="submit" value="Reload" />
+						type="submit" value="Cancel" /> <input onclick="reloadChart()" type="submit" value="Reload" />
 					</td>
 					<!-- zone graphique -->
 					<td style="border: none;">
