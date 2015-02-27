@@ -339,125 +339,128 @@ function updatebyNumberResultsOrdonate(){
 }
 
 function addChart() {
-	numGraphe++;
-	var aera = document.getElementById("charts");
-	//create object to insert as a list object
-	var chart = $('<li class="chart" id="chart' + numGraphe + '">').appendTo(aera); 
-	
-	
-	// close button
-	$('<div class="close"><img id="delete-current-focus" height="16" title="Click on this red cross to delete the current focus" alt="Delete" src="icon-delete.png"></div>').appendTo(chart); 
-	$('<span>' + $('#chartTitle').val() + '</span>').appendTo(chart);
-	//clone the current graph ino the list div 
-	var current = $('#graphe').clone();
-	current[0].id = current[0].id + numGraphe;
-	current.appendTo(chart);
-	
-	//Get which dimension and measure are used to build the chart
-	var dimension = [];
-	var measure = [];
-	$("input[name=dimensionRadioButton][type='radio']:checked").each(function() {
-		dimension.push($(this).val());
-	});
-	$("input[name=measureRadioButton][type='checkbox']:checked").each(function() {
-		measure.push($(this).val());
-	});
-	$('<div class="dimension" style="display: none">'+dimension+'</div>').appendTo(chart);
-	$('<div class="measure" style="display: none">'+measure+'</div>').appendTo(chart);
+	$("input[name=dimensionRadioButton][type='radio']:checked").each(function(){
+		$("input[name=graphs][type='radio']:checked").each(function(){
+			numGraphe++;
+			var aera = document.getElementById("charts");
+			//create object to insert as a list object
+			var chart = $('<li class="chart" id="chart' + numGraphe + '">').appendTo(aera); 
+			// close button
+			$('<div class="close"><img id="delete-current-focus" height="16" title="Click on this red cross to delete the current focus" alt="Delete" src="icon-delete.png"></div>').appendTo(chart); 
+			$('<span>' + $('#chartTitle').val() + '</span>').appendTo(chart);
+			//clone the current graph ino the list div 
+			var current = $('#graphe').clone();
+			current[0].id = current[0].id + numGraphe;
+			current.appendTo(chart);
+
+			//Get which dimension and measure are used to build the chart
+			var dimension = [];
+			var measure = [];
+			$("input[name=dimensionRadioButton][type='radio']:checked").each(function() {
+				dimension.push($(this).val());
+			});
+			$("input[name=measureRadioButton][type='checkbox']:checked").each(function() {
+				measure.push($(this).val());
+			});
+			$('<div class="dimension" style="display: none">'+dimension+'</div>').appendTo(chart);
+			$('<div class="measure" style="display: none">'+measure+'</div>').appendTo(chart);
 
 
-	//add function in order to delete the list object
-	$('.close').click(function() {
-		$(this).closest('li').remove();
-		//Delete too the chartClicked
-		if($('#currentChartClicked')){
-			if($(this).closest('li')[0].children[2].id == $('#currentChartClicked')[0].children[1].id) {
-				$('#currentChartClicked')[0].innerHTML = "";
-			}
-		}
-	});
-
-
-	$('.chart').click(function() {
-		$('li').removeClass('selected');
-		$(this).addClass('selected');
-		var aera2 = document.getElementById('chartClicked');
-		aera2.innerHTML = "";
-		var name = $(this)[0].children[2].id;
-		var chart2 = $('<div id="currentChartClicked" name="' + name + '">').appendTo(aera2);
-		//modify button
-		$('<div class="modify" name="' + name + '">Modify</div>').appendTo(chart2);
-		var current2 = $('#' + name).clone().appendTo(chart2);
-		$('.modify').click(function() {
-			$('.modify').click(function() {
-				//Detection dimensions and measure of current state
-				var dimensionCurrent = [""];
-				var measureCurrent = [""];
-				$("input[name=dimensionRadioButton]:radio").each(function() {
-					dimensionCurrent.push($(this).val());
-				});
-				$("input[name=measureRadioButton]:checkbox").each(function() {
-					measureCurrent.push($(this).val());
-				});
-				
-				//Get the state of inserted chart in order to compare with current state under table form
-				var name= $(this).attr("name");
-				var dimension = $('#'+name).parent().children().get(3).innerHTML; 
-				var measure = $('#'+name).parent().children().get(4).innerHTML;
-				var tabDimension=[];
-				var tabMeasure=[];
-				var reg = new RegExp("[,;]+","g"); 
-				tabDimension= dimension.split(reg); 
-				tabMeasure= measure.split(reg); 
-
-				//check out if dimension of chart is still in the request
-				var dimensionPresent=0;
-				var measurePresent=0;
-				
-				
-				if (tabDimension.length > dimensionCurrent.length || tabMeasure.length > measureCurrent.length	){
-					Alert.error('Yours request has changed, any modification is now impossible', 'Modify', {displayDuration: 0});
-					return; 
-				}
-
-				
-				for (var i = 0 ;i<tabDimension.length;i++ ){
-					for (var j=0;j<dimensionCurrent.length;j++ ){
-						if(tabDimension[i]==dimensionCurrent[j]){
-							dimensionPresent++; 
-						}
+			//add function in order to delete the list object
+			$('.close').click(function() {
+				$(this).closest('li').remove();
+				//Delete too the chartClicked
+				if($('#currentChartClicked')){
+					if($(this).closest('li')[0].children[2].id == $('#currentChartClicked')[0].children[1].id) {
+						$('#currentChartClicked')[0].innerHTML = "";
 					}
 				}
-				
-					for (var i = 0 ;i<tabMeasure.length;i++ ){
-						for (var j=0;j<measureCurrent.length;j++ ){
-							if(tabMeasure[i]==measureCurrent[j]){
-								measurePresent++;
+			});
+
+
+			$('.chart').click(function() {
+				$('li').removeClass('selected');
+				$(this).addClass('selected');
+				var aera2 = document.getElementById('chartClicked');
+				aera2.innerHTML = "";
+				var name = $(this)[0].children[2].id;
+				var chart2 = $('<div id="currentChartClicked" name="' + name + '">').appendTo(aera2);
+				//modify button
+				$('<div class="modify" name="' + name + '">Modify</div>').appendTo(chart2);
+				var current2 = $('#' + name).clone().appendTo(chart2);
+				$('.modify').click(function() {
+					$('.modify').click(function() {
+						//Detection dimensions and measure of current state
+						var dimensionCurrent = [""];
+						var measureCurrent = [""];
+						$("input[name=dimensionRadioButton]:radio").each(function() {
+							dimensionCurrent.push($(this).val());
+						});
+						$("input[name=measureRadioButton]:checkbox").each(function() {
+							measureCurrent.push($(this).val());
+						});
+
+						//Get the state of inserted chart in order to compare with current state under table form
+						var name= $(this).attr("name");
+						var dimension = $('#'+name).parent().children().get(3).innerHTML; 
+						var measure = $('#'+name).parent().children().get(4).innerHTML;
+						var tabDimension=[];
+						var tabMeasure=[];
+						var reg = new RegExp("[,;]+","g"); 
+						tabDimension= dimension.split(reg); 
+						tabMeasure= measure.split(reg); 
+
+						//check out if dimension of chart is still in the request
+						var dimensionPresent=0;
+						var measurePresent=0;
+
+
+						if (tabDimension.length > dimensionCurrent.length || tabMeasure.length > measureCurrent.length	){
+							Alert.error('Yours request has changed, any modification is now impossible', 'Modify', {displayDuration: 0});
+							return; 
+						}
+
+
+						for (var i = 0 ;i<tabDimension.length;i++ ){
+							for (var j=0;j<dimensionCurrent.length;j++ ){
+								if(tabDimension[i]==dimensionCurrent[j]){
+									dimensionPresent++; 
+								}
 							}
 						}
-					}
-					
-					if ( dimensionPresent== tabDimension.length && measurePresent == tabMeasure.length ){
-						document.getElementById("graphe").innerHTML = "";
-						var chart = $('#'+name).parent().children().get(2).innerHTML;; 
-						document.getElementById("graphe").innerHTML = chart;
-						
-						
-						$('#'+name).closest('li').remove();
-						$('#chartClicked').empty();
-						
-						Alert.info('You can now modify your chart.', 'Chart Modification');
-						return; 
-						
-					}
-					else {
-						Alert.error('Yours request has changed, any modification is now impossible', 'Modify', {displayDuration: 0});
-						return; 
-					}
+
+						for (var i = 0 ;i<tabMeasure.length;i++ ){
+							for (var j=0;j<measureCurrent.length;j++ ){
+								if(tabMeasure[i]==measureCurrent[j]){
+									measurePresent++;
+								}
+							}
+						}
+
+						if ( dimensionPresent== tabDimension.length && measurePresent == tabMeasure.length ){
+							document.getElementById("graphe").innerHTML = "";
+							var chart = $('#'+name).parent().children().get(2).innerHTML;; 
+							document.getElementById("graphe").innerHTML = chart;
+
+
+							$('#'+name).closest('li').remove();
+							$('#chartClicked').empty();
+
+							Alert.info('You can now modify your chart.', 'Chart Modification');
+							return; 
+
+						}
+						else {
+							Alert.error('Yours request has changed, any modification is now impossible', 'Modify', {displayDuration: 0});
+							return; 
+						}
+					});
+				});
 			});
+			return; 
 		});
+		return; 
 	});
-	
 }
 
 
@@ -771,12 +774,12 @@ function optionsChart(){
 				}
 			},
 			explorer: {
-              actions: [
-                  'dragToZoom',
-                  'rightClickToReset'
-              ],
-              maxZoomIn:0.05
-          	}, 
+				actions: [
+				          'dragToZoom',
+				          'rightClickToReset'
+				          ],
+				          maxZoomIn:0.05
+			}, 
 			width : 1000,
 			height : 563,
 			backgroundColor: $('#backgroundColorChart').val(),
