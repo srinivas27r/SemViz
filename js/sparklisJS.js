@@ -32,6 +32,7 @@ var tlatitude = [];
 var tgeographicName = [];
 var longitude, latitude, geographicName;
 var select = 0;
+var mappable = false;
 
 //MO reacts to changes in a DOM. It detects when 'extension' appears.
 var observer = new MutationObserver(function(mutations) {
@@ -121,8 +122,10 @@ function visualizationMap(){
 		//generateOrdonate(tlatitude, latitude, tableToJSON, headerTable);
 		tlongitude = generate_long_lat(longitude, headerTable, tableToJSON);
 		tlatitude = generate_long_lat(latitude, headerTable, tableToJSON);
-	}	
+	}
 }
+
+
 
 function generate_long_lat(name, headerTable, tableToJSON){
 	var tab =[];
@@ -309,6 +312,23 @@ function updatebyNumberResultsOrdonate(){
 		}
 	});
 
+	long = alsoInterested.find(/\w*long\b/);
+	lat = alsoInterested.find(/\w*lat\b/);
+	
+	if (long || lat) {
+		document.getElementById("aggregator").selectedIndex = "0";
+		document.getElementById("aggregator").disabled=true; 
+	}
+	else {
+		document.getElementById("aggregator").disabled=false;
+	}
+	if (long && lat) {
+		mappable = true;
+	}
+	else {
+		mappable= false;
+	}
+	
 	finalTab = generateData(tableToJSON);
 
 	legend_ordonate =[];
@@ -812,7 +832,8 @@ function compareArray(a1, a2)
 
 //Map
 function drawMapChart() {
-	if (tlongitude.length !=0 && tlatitude.length!=0){
+	
+	if (tlongitude.length !=0 && tlatitude.length!=0 && mappable){
 		if (select == 3){
 			// corespondance des tableau
 			var don =  [];
@@ -841,69 +862,70 @@ function drawMapChart() {
 			chart_graph.draw(data_graph, options_graph);
 
 		}
-		else {
-			//Alert.error('Review Request. Too many measure or not suffisance.', 'Map', {displayDuration: 0});
-		}
 	}
-	else {
-		//Alert.error('Review Request. It is necessary to have a latitude, longitude and a place to build a map.', 'Map', {displayDuration: 0});
-	}
-
 }
 
 //Column chart
 function drawBarChart_vertical() {
-	var data_for_googleChart = insertData();
-
-	var options_bar = optionsChart();
-
-	// add chart into div #graph
-	var chart_column = new google.visualization.ColumnChart($('#graphe')[0]);
-	chart_column.draw(data_for_googleChart, options_bar);
+	if (select <= 3){
+		var data_for_googleChart = insertData();
+	
+		var options_bar = optionsChart();
+	
+		// add chart into div #graph
+		var chart_column = new google.visualization.ColumnChart($('#graphe')[0]);
+		chart_column.draw(data_for_googleChart, options_bar);
+	}
 }
 
 //Bar chart
 function drawBarChart_horizontal() {
-	var data_for_googleChart = insertData();
-
-	var options_bar = optionsChart();
-
-	//Add chart into div #graph
-	var chart_bar = new google.visualization.BarChart($('#graphe')[0]);
-	chart_bar.draw(data_for_googleChart, options_bar);
+	if (select <= 3){
+		var data_for_googleChart = insertData();
+	
+		var options_bar = optionsChart();
+	
+		//Add chart into div #graph
+		var chart_bar = new google.visualization.BarChart($('#graphe')[0]);
+		chart_bar.draw(data_for_googleChart, options_bar);
+	}
 }
 
 //Line Chart
 function drawLineChart() {
-	var data_for_googleChart = insertData();
-
-	var options_line =  optionsChart();
-
-	//Add chart into div #graph
-	var chart_line = new google.visualization.LineChart($('#graphe')[0]);
-	chart_line.draw(data_for_googleChart, options_line);
+	if (select <= 3){
+		var data_for_googleChart = insertData();
+	
+		var options_line =  optionsChart();
+	
+		//Add chart into div #graph
+		var chart_line = new google.visualization.LineChart($('#graphe')[0]);
+		chart_line.draw(data_for_googleChart, options_line);
+	}
 }
 
 //Pie chart
 function drawPieChart() {
-	var data_pie = new google.visualization.DataTable();
-	data_pie.addColumn('string', 'X');
-	data_pie.addColumn('number', 'People');
-
-	//here we insert the data from our two table
-	for (var i = 0; i < graph_absciss.length; i++) {
-		data_pie.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
+	if (select <= 1){
+		var data_pie = new google.visualization.DataTable();
+		data_pie.addColumn('string', 'X');
+		data_pie.addColumn('number', 'People');
+	
+		//here we insert the data from our two table
+		for (var i = 0; i < graph_absciss.length; i++) {
+			data_pie.addRows([ [ graph_absciss[i], graph_ordonate[i] ] ])
+		}
+		// here the option of our representation
+		var options = {
+				title : 'ici un titre',
+				width : 1000,
+				height : 563,
+				is3D : true
+		};
+	
+		var chart_pie = new google.visualization.PieChart($('#graphe')[0]);
+		chart_pie.draw(data_pie, options);
 	}
-	// here the option of our representation
-	var options = {
-			title : 'ici un titre',
-			width : 1000,
-			height : 563,
-			is3D : true
-	};
-
-	var chart_pie = new google.visualization.PieChart($('#graphe')[0]);
-	chart_pie.draw(data_pie, options);
 }
 
 //Add  data series to one of charts 
