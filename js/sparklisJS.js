@@ -34,6 +34,8 @@ var longitude, latitude, geographicName;
 var select = 0;
 var mappable = false;
 
+$('#chartList').hide();
+
 //MO reacts to changes in a DOM. It detects when 'extension' appears.
 var observer = new MutationObserver(function(mutations) {
 	mutations.forEach(function(mutation) {
@@ -363,6 +365,9 @@ function addChart() {
 		$("input[name=graphs][type='radio']:checked").each(function(){
 			numGraphe++;
 			var aera = document.getElementById("charts");
+			if ( $('ul#charts li').length > -1 ) {
+				$('#chartList').show();
+			};
 			//create object to insert as a list object
 			var chart = $('<li class="chart" id="chart' + numGraphe + '">').appendTo(aera); 
 			// close button
@@ -389,9 +394,13 @@ function addChart() {
 			//add function in order to delete the list object
 			$('.close').click(function() {
 				$(this).closest('li').remove();
+				if ( $('ul#charts li').length < 1 ) {
+					$('#chartList').hide();
+					
+				};
 				//Delete too the chartClicked
 				if($('#currentChartClicked')){
-					if($(this).closest('li')[0].children[2].id == $('#currentChartClicked')[0].children[1].id) {
+					if($(this).closest('li')[0].children[2].id == $('#currentChartClicked')[0].children[2].id) {
 						$('#currentChartClicked')[0].innerHTML = "";
 					}
 				}
@@ -405,6 +414,7 @@ function addChart() {
 				aera2.innerHTML = "";
 				var name = $(this)[0].children[2].id;
 				var chart2 = $('<div id="currentChartClicked" name="' + name + '">').appendTo(aera2);
+				$('<h2>Selected chart</>').appendTo(chart2);
 				//modify button
 				$('<div class="modify" name="' + name + '">Modify</div>').appendTo(chart2);
 				var current2 = $('#' + name).clone().appendTo(chart2);
@@ -465,6 +475,9 @@ function addChart() {
 
 							$('#'+name).closest('li').remove();
 							$('#chartClicked').empty();
+							if ( $('ul#charts li').length < 1 ) {
+								$('#chartList').hide();
+							};
 
 							Alert.info('You can now modify your chart.', 'Chart Modification');
 							return; 
@@ -837,10 +850,10 @@ function drawMapChart() {
 		if (select == 3){
 			// corespondance des tableau
 			var don =  [];
-			if((compareArray(tlongitude,graph_ordonate)||compareArray(tlongitude,graph_ordonate_second)) && (compareArray(tlatitude,graph_ordonate)||compareArray(tlatitude,graph_ordonate_second))){// cas troisiÃ¨me mesure
+			if((compareArray(tlongitude,graph_ordonate)||compareArray(tlongitude,graph_ordonate_second)) && (compareArray(tlatitude,graph_ordonate)||compareArray(tlatitude,graph_ordonate_second))){// cas troisiÃƒÂ¨me mesure
 				don = graph_ordonate_third;
 			}
-			else if((compareArray(tlongitude,graph_ordonate)||compareArray(tlongitude,graph_ordonate_third)) &&(compareArray(tlatitude,graph_ordonate)||compareArray(tlatitude,graph_ordonate_third))){// cas deuxiÃ¨me mesure
+			else if((compareArray(tlongitude,graph_ordonate)||compareArray(tlongitude,graph_ordonate_third)) &&(compareArray(tlatitude,graph_ordonate)||compareArray(tlatitude,graph_ordonate_third))){// cas deuxiÃƒÂ¨me mesure
 				don = graph_ordonate_second;
 			}
 			else {// cas premier mesure
